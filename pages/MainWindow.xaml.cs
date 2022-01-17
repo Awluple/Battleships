@@ -21,7 +21,6 @@ namespace Battleships
         public MainWindow()
         {
             InitializeComponent();
-            Uri uri = new Uri("../views/Test2.xaml", UriKind.Relative);
         }
     }
 }

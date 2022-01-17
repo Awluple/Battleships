@@ -6,6 +6,19 @@
         xmlns:local="clr-namespace:Battleships"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../resources/images.xaml"/>
+            </ResourceDictionary.MergedDictionaries> 
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Window.Background>
+      <ImageBrush Stretch="UniformToFill" ImageSource="{StaticResource backgroundPaper}"/>
+    </Window.Background>
+
+
     <Grid VerticalAlignment="Top" HorizontalAlignment="Left" ShowGridLines="True" Width="250" Height="100" x:Name="Eki">
       <Grid.ColumnDefinitions>
         <ColumnDefinition />
@@ -19,13 +32,6 @@
         <RowDefinition />
       </Grid.RowDefinitions>
 
-      <TextBlock FontSize="20" FontWeight="Bold" Grid.ColumnSpan="3" Grid.Row="0">2005 Products Shipped</TextBlock>
-      <TextBlock FontSize="12" FontWeight="Bold" Grid.Row="1" Grid.Column="0">Quarter 1</TextBlock>
-      <TextBlock FontSize="12" FontWeight="Bold" Grid.Row="1" Grid.Column="1">Quarter 2</TextBlock>
-      <TextBlock FontSize="12" FontWeight="Bold" Grid.Row="1" Grid.Column="2">Quarter 3</TextBlock>
-      <TextBlock Grid.Row="2" Grid.Column="0">50000</TextBlock>
-      <Frame Grid.Row="2" Grid.Column="1" x:Name="islandFrame" NavigationUIVisibility="Hidden" Source="Test.xaml" />
-      <TextBlock Grid.Row="2" Grid.Column="2" x:Name="block">150000</TextBlock>
-      <TextBlock FontSize="16" FontWeight="Bold" Grid.ColumnSpan="3" Grid.Row="3">Total Units: 300000</TextBlock>
+    
     </Grid>
 </Window>
