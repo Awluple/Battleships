@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Battleships"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" ResizeMode="NoResize" Height="900" Width="900">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,20 +18,7 @@
       <ImageBrush Stretch="UniformToFill" ImageSource="{StaticResource backgroundPaper}"/>
     </Window.Background>
 
-
-    <Grid VerticalAlignment="Top" HorizontalAlignment="Left" ShowGridLines="True" Width="250" Height="100" x:Name="Eki">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition />
-        <ColumnDefinition />
-        <ColumnDefinition />
-      </Grid.ColumnDefinitions>
-      <Grid.RowDefinitions>
-        <RowDefinition />
-        <RowDefinition />
-        <RowDefinition />
-        <RowDefinition />
-      </Grid.RowDefinitions>
+    <Frame Name="MainContainer" Source="MainMenu.xaml" />
 
     
-    </Grid>
 </Window>
