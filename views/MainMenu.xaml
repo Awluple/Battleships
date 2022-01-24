@@ -1,8 +1,9 @@
 <Page
+    x:Class="Battleships.MainMenu"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-<Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ShowGridLines="False" x:Name="Eki">
+<Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ShowGridLines="False">
     <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*" />
         <ColumnDefinition MaxWidth="300" />
@@ -20,7 +21,10 @@
         <Border.Effect>
             <DropShadowEffect ShadowDepth="2"/>
         </Border.Effect>
-        <Button Cursor="Hand" Background="#FFDFD991" FontWeight="Bold" VerticalAlignment="Stretch" FontSize="20">JOIN</Button>
+        <Button FontSize="20" FontWeight="Bold" Cursor="Hand" Background="#FFDFD991"
+        Foreground="Black" VerticalAlignment="Stretch" Click="hyperlink_Click"> 
+            JOIN
+        </Button>
     </Border>
     
     <Border Margin="10" Background="White"  Grid.Column="1" Grid.Row="3">
