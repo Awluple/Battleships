@@ -8,9 +8,9 @@ using System.Windows;
 
 namespace Battleships
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
+    static class Settings {
+        public static readonly string serverUri = "http://127.0.0.1:7850/";
+    }
     public partial class App : Application
     {
     }

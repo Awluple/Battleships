@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch (console)",
-            "type": "coreclr",
+            "name": "Full .Net Debug",
+            "type": "clr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/bin/Debug/net6.0-windows/Battleships.dll",
+            "program": "${workspaceFolder}/bin/Debug/net48/Battleships.exe",
             "args": [],
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
             "stopAtEntry": false
         },
         {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
+            "name": ".NET Attach",
+            "type": "clr",
             "request": "attach"
         }
     ]

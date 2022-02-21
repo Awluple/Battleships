@@ -2,12 +2,35 @@
         x:Class="Battleships.GamesList"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" x:Name="gamesListGrid">
+    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="150" />
             <ColumnDefinition MaxWidth="300" />
             <ColumnDefinition Width="*"  />
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Margin="20,10,0,20" Grid.Row="0" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+
+            <Button Click="hyperlink_MainMenu" Padding="5,0,5,0" Grid.Row="0" Grid.Column="0">Main Menu</Button>
+            <Button Click="LoadGames" Margin="0,10,0,0" Grid.Row="1" Grid.Column="0">Refresh</Button>
+        </Grid>
+
+        <Grid Grid.Row="0" Grid.Column="1" x:Name="gamesListGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+        </Grid>
     </Grid>
     
 </Page>
