@@ -46,8 +46,13 @@ namespace Battleships
         }
 
         public async void LoadGames(object sender = null, RoutedEventArgs e = null) {
+            infoHeader.Text = "Loading games...";
             gamesListGrid.Children.Clear(); // clear old games list
             Dictionary<string, GameInfo[]> games = await this.GetGamesAsync();
+
+            if(!games.ContainsKey("games")) return;
+
+            infoHeader.Text = "Games:";
 
             List<RowDefinition> rows = new List<RowDefinition>();
 
@@ -60,38 +65,62 @@ namespace Battleships
                 var row = new RowDefinition();
 
                 GridLengthConverter gridLengthConverter = new GridLengthConverter();
-                row.Height = (GridLength)gridLengthConverter.ConvertFromString("50");
+                row.Height = (GridLength)gridLengthConverter.ConvertFromString("auto");
                 rows.Add(row);
                 gamesListGrid.RowDefinitions.Add(row);
 
 
-                TextBlock txt = new TextBlock();
-                txt.Text = $"Game #{game.id}";
-                txt.FontSize = 12;
-                txt.FontWeight = FontWeights.Bold;
-                Grid.SetRow(txt, rowIndex);
-                Grid.SetColumn(txt, 1);
+                TextBlock gameInfo = new TextBlock();
+                gameInfo.Text = $"Game #{game.id}";
+                gameInfo.FontSize = 24;
+                gameInfo.FontWeight = FontWeights.Bold;
+                gameInfo.TextAlignment = TextAlignment.Center;
+                gameInfo.Margin = new Thickness{ Bottom = 10, Top = 10 };
+                
+                Grid.SetRow(gameInfo, rowIndex);
+                Grid.SetColumn(gameInfo, 0);
 
-                gamesListGrid.Children.Add(txt);
+
+
+                Button joinButton = new Button();
+                joinButton.Style = (Style)FindResource("Menu");
+                joinButton.Content = "Join";
+                joinButton.HorizontalAlignment = HorizontalAlignment.Center;
+                joinButton.Padding = new Thickness{ Right = 10, Left = 10 };
+                joinButton.Margin = new Thickness{ Bottom = 5, Top = 5 };
+
+                Grid.SetRow(joinButton, rowIndex);
+                Grid.SetColumn(joinButton, 1);
+
+                gamesListGrid.Children.Add(gameInfo);
+                gamesListGrid.Children.Add(joinButton);
                 rowIndex++;
             }
         }
 
 
-        public async Task<Dictionary<string, GameInfo[]>> GetGamesAsync() {
+        private async Task<Dictionary<string, GameInfo[]>> GetGamesAsync() {
 
             List<(int, int)> games = new List<(int, int)>();
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Settings.serverUri);
         
-            using(HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync()){
-            using(Stream stream = response.GetResponseStream())
-            using(StreamReader reader = new StreamReader(stream))
+            try
             {
-                string json = await reader.ReadToEndAsync();
-                return JsonConvert.DeserializeObject<Dictionary<string, GameInfo[]>>(json);
+                using(HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+                using(Stream stream = response.GetResponseStream())
+                using(StreamReader reader = new StreamReader(stream))
+                {
+                    string json = await reader.ReadToEndAsync();
+                    return JsonConvert.DeserializeObject<Dictionary<string, GameInfo[]>>(json);
             }
             }
+            catch
+            {
+                infoHeader.Text = "Connection error";
+                return new Dictionary<string, GameInfo[]>();
+            }
+            
         }
 
     }
