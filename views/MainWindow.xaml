@@ -18,7 +18,7 @@
       <ImageBrush Stretch="UniformToFill" ImageSource="{StaticResource backgroundPaper}"/>
     </Window.Background>
 
-    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ShowGridLines="False" x:Name="Eki">
+    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ShowGridLines="False">
     <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>

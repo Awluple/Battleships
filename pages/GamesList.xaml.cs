@@ -18,7 +18,7 @@ using System.Windows.Shapes;
 
 using Newtonsoft.Json;
 
-namespace Battleships
+namespace Battleships.Menu
 {
 
     public struct GameInfo
