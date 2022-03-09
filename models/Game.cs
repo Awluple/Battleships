@@ -7,31 +7,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Bson;
 
+using BattleshipsShared.Communication;
+using BattleshipsShared.Models;
+
 namespace Battleships.Board
 {
-
-    public struct Message
-    {
-
-        public Message(string dataType, object data) {
-            this.dataType = dataType;
-            this.data = data;
-        }
-
-        public string dataType { get; set; }
-        public object data { get; set; }
-    }
-    public struct GameJoinInfo
-        {
-        public GameJoinInfo(int id, string player)
-        {
-            this.id = id;
-            this.player = player;
-        }
-        public int id { get; }
-        public string player { get; }
-        };
-
     public class Game
     {
         public (string playerOne, string playerTwo) players = (null, null);
@@ -44,32 +24,34 @@ namespace Battleships.Board
             if(WsClient == null) {
                 WsClient = new ClientWebSocket();
                 WsClient.Options.AddSubProtocol("bson");
-                this.Connect();
-                this.Listener();
+                Connect();
+                Listener();
             }
-            this.Send();
+            Send();
         }
 
-        public async void CloseConnection() {
-            await WsClient.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
+        public static async void CloseConnection() {
+            if(WsClient.State == WebSocketState.Open){
+                await WsClient.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
+            }
         }
 
-        private async void Connect() {
+        private static async void Connect() {
             await WsClient.ConnectAsync(new Uri("ws://127.0.0.1:7850/"), CancellationToken.None);
         }
 
 
-        private async void Send() {
+        private static async void Send() {
                     using (MemoryStream ms = new MemoryStream())
                     using (BsonDataWriter datawriter = new BsonDataWriter(ms))
                     {
                         JsonSerializer serializer = new JsonSerializer();
-                        // serializer.Serialize(datawriter, new GameJoinInfo(1, "abc"));
+                        serializer.Serialize(datawriter, new Message(RequestType.CreateGame, new GameJoinInfo(1, "abc")));
                         await WsClient.SendAsync(new ArraySegment<byte>(ms.ToArray()), WebSocketMessageType.Binary, true, CancellationToken.None);
                     }
                 }
 
-        private async void Listener() {
+        private static async void Listener() {
             //  byte[] receiveBuffer = new byte[1024];
 
             while (true) {
@@ -83,12 +65,12 @@ namespace Battleships.Board
                             {
                                 JsonSerializer serializer = new JsonSerializer();
                                 message = serializer.Deserialize<Message>(reader);
-                                JObject obj = (JObject)message.data;
+                                JObject obj = (JObject)message.data; 
                             }
                         }
                         catch (Newtonsoft.Json.JsonSerializationException ex)
                         {
-                            
+                            Console.WriteLine(ex);
                         }
                 }
         }

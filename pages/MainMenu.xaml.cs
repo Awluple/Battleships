@@ -17,20 +17,12 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using Newtonsoft.Json;
+using BattleshipsShared.Models;
 
 using Battleships.Board;
 
 namespace Battleships.Menu
 {
-    public struct User
-    {
-
-        public User(string username) {
-            this.username = username;
-        }
-
-        public string username { get; set; }
-    }
 
     public struct GameId
     {
