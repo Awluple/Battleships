@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Threading;
 
@@ -46,7 +47,7 @@ namespace Battleships.Board
                     using (BsonDataWriter datawriter = new BsonDataWriter(ms))
                     {
                         JsonSerializer serializer = new JsonSerializer();
-                        serializer.Serialize(datawriter, new Message(RequestType.CreateGame, new GameJoinInfo(1, "abc")));
+                        serializer.Serialize(datawriter, new Message(RequestType.CreateGame, new Dictionary<string, object> {{"gameJoinInfo", new GameJoinInfo(1, "abc")}})); // TEMP
                         await WsClient.SendAsync(new ArraySegment<byte>(ms.ToArray()), WebSocketMessageType.Binary, true, CancellationToken.None);
                     }
                 }

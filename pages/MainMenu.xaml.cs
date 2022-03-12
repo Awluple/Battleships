@@ -44,6 +44,7 @@ namespace Battleships.Menu
 
             board.PlaceShip((4, 3), (1,1));
             Console.WriteLine(board.IsAvialiavle(7, 4));
+            userId.Text = "Admiral #" + Settings.userId.ToString();
         }
 
         public void hyperlink_Click(object sender, RoutedEventArgs e)
@@ -71,13 +72,13 @@ namespace Battleships.Menu
                 {
                     string data = await reader.ReadToEndAsync();
                     GameId gameId = JsonConvert.DeserializeObject<GameId>(data);
+                    this.JoinGame(gameId.id);
             }
             }
             catch
             {
 
             }
-            this.JoinGame(1);
         }
         
 

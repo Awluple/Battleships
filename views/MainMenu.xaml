@@ -24,6 +24,7 @@
         <RowDefinition MaxHeight="25" />
         <RowDefinition MaxHeight="75" />
         <RowDefinition Height="*" />
+        <RowDefinition MaxHeight="20" />
 
     </Grid.RowDefinitions>
     <Border Style="{DynamicResource Button}" Margin="10"  Grid.Column="1" Grid.Row="1">
@@ -42,6 +43,8 @@
         </Border.Effect>
         <Button Click="CreateGame" Style="{DynamicResource Menu}" Grid.Column="1" Grid.Row="3">CREATE GAME</Button>
     </Border>
+
+    <TextBlock HorizontalAlignment="Center" x:Name="userId" Foreground="#919191" Grid.Column="1" Grid.Row="5"></TextBlock>
 
 </Grid>
 

@@ -27,7 +27,7 @@
 
     </Grid.RowDefinitions>
     
-    <Frame Grid.Column="0" Grid.Row="0" NavigationUIVisibility="Hidden" Name="MainContainer" Source="MainMenu.xaml" />
+    <Frame Grid.Column="0" Grid.Row="0" NavigationUIVisibility="Hidden" Name="MainContainer" Source="StartPage.xaml" />
 </Grid>
     
 </Window>
