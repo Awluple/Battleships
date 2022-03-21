@@ -17,7 +17,11 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using BattleshipsShared.Models;
+using BattleshipsShared.Communication;
+
+using Battleships.Board;
 
 namespace Battleships.Menu
 {
@@ -73,6 +77,8 @@ namespace Battleships.Menu
 
 
                 Button joinButton = new Button();
+                joinButton.Tag = game.id;
+                joinButton.Click += this.Join;
                 joinButton.Style = (Style)FindResource("Menu");
                 joinButton.Content = "Join";
                 joinButton.HorizontalAlignment = HorizontalAlignment.Center;
@@ -88,12 +94,28 @@ namespace Battleships.Menu
             }
         }
 
+        private void GetConfirmation(object sender, WebSocketContextEventArgs e) {
+            if(!(e.message.requestType == RequestType.JoinConfirmation)) return;
+
+            Game.WebSocketMessage -= this.GetConfirmation;
+
+            Dictionary<string, JObject> data = Message.DeserializeData(e.message);
+            JoinConfirmation confirmation = data["confirmation"].ToObject<JoinConfirmation>();
+
+        }
+
+        public void Join(object sender, RoutedEventArgs e) {
+            var button = sender as Button;
+            Game game = new Game((int)button.Tag);
+            Game.WebSocketMessage += this.GetConfirmation;
+            game.JoinGame();
+        }
 
         private async Task<Dictionary<string, GameInfo[]>> GetGamesAsync() {
 
             List<(int, int)> games = new List<(int, int)>();
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Settings.serverUri);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://" + Settings.serverUri);
         
             try
             {

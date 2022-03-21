@@ -40,7 +40,7 @@ namespace Battleships.Menu
         }
 
         async private void GetUserId() {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Settings.serverUri + "userid");
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://" + Settings.serverUri + "userid");
         
             try
             {

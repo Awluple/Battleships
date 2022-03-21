@@ -32,7 +32,7 @@
             <DropShadowEffect ShadowDepth="2"/>
         </Border.Effect>
         <Button Style="{DynamicResource Menu}"
-        Foreground="Black" VerticalAlignment="Stretch" Click="hyperlink_Click"> 
+        Foreground="Black" VerticalAlignment="Stretch" Click="hyperlink_Join"> 
             JOIN
         </Button>
     </Border>
@@ -41,7 +41,7 @@
         <Border.Effect>
               <DropShadowEffect ShadowDepth="2"/>
         </Border.Effect>
-        <Button Click="CreateGame" Style="{DynamicResource Menu}" Grid.Column="1" Grid.Row="3">CREATE GAME</Button>
+        <Button Click="hyperlink_CreateGame" Style="{DynamicResource Menu}" Grid.Column="1" Grid.Row="3">CREATE GAME</Button>
     </Border>
 
     <TextBlock HorizontalAlignment="Center" x:Name="userId" Foreground="#919191" Grid.Column="1" Grid.Row="5"></TextBlock>

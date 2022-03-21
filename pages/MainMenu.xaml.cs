@@ -17,6 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using Newtonsoft.Json;
+using BattleshipsShared.Communication;
 using BattleshipsShared.Models;
 
 using Battleships.Board;
@@ -47,43 +48,15 @@ namespace Battleships.Menu
             userId.Text = "Admiral #" + Settings.userId.ToString();
         }
 
-        public void hyperlink_Click(object sender, RoutedEventArgs e)
+        public void hyperlink_Join(object sender, RoutedEventArgs e)
         {
            Uri uri = new Uri("../views/GamesList.xaml", UriKind.Relative);
            this.NavigationService.Navigate(uri);
         }
 
-        public async void CreateGame(object sender, RoutedEventArgs e) {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Settings.serverUri);
-            request.Method = "POST";
-            request.ContentType = "application/json";
-            using(Stream stream = request.GetRequestStream())
-            using(StreamWriter writer = new StreamWriter(stream))
-            {
-                string serialized = JsonConvert.SerializeObject(new User("test"));
-                await writer.WriteAsync(serialized);
-            }
-        
-            try
-            {
-                using(HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
-                using(Stream stream = response.GetResponseStream())
-                using(StreamReader reader = new StreamReader(stream))
-                {
-                    string data = await reader.ReadToEndAsync();
-                    GameId gameId = JsonConvert.DeserializeObject<GameId>(data);
-                    this.JoinGame(gameId.id);
-            }
-            }
-            catch
-            {
-
-            }
-        }
-        
-
-        private void JoinGame(int gameId) {
-            Game game = new Game("Test");
+        public void hyperlink_CreateGame(object sender, RoutedEventArgs e) {
+            Uri uri = new Uri("../views/CreateGame.xaml", UriKind.Relative);
+           this.NavigationService.Navigate(uri);
         }
     }
 }
