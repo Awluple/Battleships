@@ -36,18 +36,21 @@ namespace Battleships.Board
     
     public partial class CreateGame : Page
     {
+
+        private Game game;
+
         public CreateGame() {
             InitializeComponent();
             this.SendCreateRequest();
         }
 
         public void BackToMainMenu(object sender, RoutedEventArgs e) {
-            Uri uri = new Uri("../views/MainMenu.xaml", UriKind.Relative);
+            Uri uri = new Uri("../views/menu/MainMenu.xaml", UriKind.Relative);
             this.NavigationService.Navigate(uri);
         }
 
         public void Cancel(object sender, RoutedEventArgs e) {
-            Uri uri = new Uri("../views/MainMenu.xaml", UriKind.Relative);
+            Uri uri = new Uri("../views/menu/MainMenu.xaml", UriKind.Relative);
             this.NavigationService.Navigate(uri);
         }
 
@@ -119,13 +122,14 @@ namespace Battleships.Board
             Dictionary<string, JObject> data = Message.DeserializeData(e.message);
             JoinConfirmation opponent = data["confirmation"].ToObject<JoinConfirmation>();
 
-            info.Text = $"Opponent joined!";
+            var page = new ShipsPlacement(this.game);
+            NavigationService.Navigate(page);
         }
 
         private void JoinCreatedGame(int gameId) {
-            Game game = new Game(gameId);
             Game.WebSocketMessage += this.GetConfirmation;
-            game.JoinGame();
+            this.game = new Game();
+            game.JoinGame(gameId);
         }
     }
 }

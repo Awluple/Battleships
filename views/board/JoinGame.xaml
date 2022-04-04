@@ -1,12 +1,12 @@
 <Page
-    x:Class="Battleships.Menu.StartPage"
+    x:Class="Battleships.Board.JoinGame"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
 <Page.Resources>
     <ResourceDictionary>
         <ResourceDictionary.MergedDictionaries>
-            <ResourceDictionary Source="../styles/Buttons.xaml"/>
+            <ResourceDictionary Source="../../styles/Buttons.xaml"/>
         </ResourceDictionary.MergedDictionaries> 
     </ResourceDictionary>
 </Page.Resources>
@@ -21,13 +21,13 @@
     <Grid.RowDefinitions>
         <RowDefinition Height="*" />
         <RowDefinition Height="100" />
-        <RowDefinition Height="auto" />
+        <RowDefinition Height="50" />
         <RowDefinition Height="*" />
 
     </Grid.RowDefinitions>
 
-    <TextBlock x:Name="info" FontSize="18" Grid.Row="1" Grid.Column="1">Connecting...</TextBlock>
-    <Button x:Name="reconnectButton" Click="Reconnect" Visibility="Hidden" FontSize="18" Grid.Row="2" Grid.Column="1">Retry</Button>
+    <TextBlock x:Name="info" FontSize="18" Grid.Row="1" Grid.Column="1">Joining game...</TextBlock>
+    <Button x:Name="backButton" Click="BackToMainMenu" Visibility="Hidden" FontSize="18" Grid.Row="2" Grid.Column="1">Back to the Main Menu</Button>
 
 </Grid>
 

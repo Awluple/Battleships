@@ -51,7 +51,7 @@ namespace Battleships.Menu
                     string json = await reader.ReadToEndAsync();
                     Dictionary<string, int> data = JsonConvert.DeserializeObject<Dictionary<string, int>>(json);
                     Settings.userId = data["id"];
-                    Uri uri = new Uri("../views/MainMenu.xaml", UriKind.Relative);
+                    Uri uri = new Uri("../views/menu/MainMenu.xaml", UriKind.Relative);
                     this.NavigationService.Navigate(uri);
             }
             }

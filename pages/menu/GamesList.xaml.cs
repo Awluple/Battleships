@@ -35,7 +35,7 @@ namespace Battleships.Menu
         }
 
         public void hyperlink_MainMenu(object sender, RoutedEventArgs e) {
-           Uri uri = new Uri("../views/MainMenu.xaml", UriKind.Relative);
+           Uri uri = new Uri("../views/menu/MainMenu.xaml", UriKind.Relative);
            this.NavigationService.Navigate(uri);
         }
 
@@ -93,22 +93,10 @@ namespace Battleships.Menu
                 rowIndex++;
             }
         }
-
-        private void GetConfirmation(object sender, WebSocketContextEventArgs e) {
-            if(!(e.message.requestType == RequestType.JoinConfirmation)) return;
-
-            Game.WebSocketMessage -= this.GetConfirmation;
-
-            Dictionary<string, JObject> data = Message.DeserializeData(e.message);
-            JoinConfirmation confirmation = data["confirmation"].ToObject<JoinConfirmation>();
-
-        }
-
         public void Join(object sender, RoutedEventArgs e) {
             var button = sender as Button;
-            Game game = new Game((int)button.Tag);
-            Game.WebSocketMessage += this.GetConfirmation;
-            game.JoinGame();
+            var page = new JoinGame((int)button.Tag);
+            NavigationService.Navigate(page);
         }
 
         private async Task<Dictionary<string, GameInfo[]>> GetGamesAsync() {

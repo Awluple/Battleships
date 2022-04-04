@@ -50,12 +50,12 @@ namespace Battleships.Menu
 
         public void hyperlink_Join(object sender, RoutedEventArgs e)
         {
-           Uri uri = new Uri("../views/GamesList.xaml", UriKind.Relative);
+           Uri uri = new Uri("../views/menu/GamesList.xaml", UriKind.Relative);
            this.NavigationService.Navigate(uri);
         }
 
         public void hyperlink_CreateGame(object sender, RoutedEventArgs e) {
-            Uri uri = new Uri("../views/CreateGame.xaml", UriKind.Relative);
+            Uri uri = new Uri("../views/board/CreateGame.xaml", UriKind.Relative);
            this.NavigationService.Navigate(uri);
         }
     }

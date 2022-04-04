@@ -1,0 +1,35 @@
+<Page
+    x:Class="Battleships.Menu.StartPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+<Page.Resources>
+    <ResourceDictionary>
+        <ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary Source="../../styles/Buttons.xaml"/>
+
+        </ResourceDictionary.MergedDictionaries> 
+    </ResourceDictionary>
+</Page.Resources>
+
+
+<Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ShowGridLines="False">
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="auto" />
+        <ColumnDefinition Width="*"  />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="*" />
+        <RowDefinition Height="100" />
+        <RowDefinition Height="auto" />
+        <RowDefinition Height="*" />
+
+    </Grid.RowDefinitions>
+
+    <TextBlock x:Name="info" FontSize="18" Grid.Row="1" Grid.Column="1">Connecting...</TextBlock>
+    <Button x:Name="reconnectButton" Click="Reconnect" Visibility="Hidden" FontSize="18" Grid.Row="2" Grid.Column="1">Retry</Button>
+
+</Grid>
+
+</Page>

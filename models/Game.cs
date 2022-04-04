@@ -43,27 +43,21 @@ namespace Battleships.Board
 
     public class Game
     {
-        public string opponent = null;
-        public int gameId;
+        public static string opponent = null;
+        public static int gameId;
 
         private static ClientWebSocket WsClient;
 
         public static event EventHandler<WebSocketContextEventArgs> WebSocketMessage;
 
-        protected virtual void OnWebSocketMessage (WebSocketContextEventArgs e) {
-            WebSocketMessage?.Invoke(this, e);
-        }
-
-        public Game(int gameId) {
-
-            this.gameId = gameId;
-
+        public Game() {
             if(WsClient == null) {
-                WsClient = new ClientWebSocket();
-                WsClient.Options.AddSubProtocol("bson");
-                WsClient.Options.SetRequestHeader("player", Settings.userId.ToString());
                 Connect();
             }
+        }
+
+        protected virtual void OnWebSocketMessage (WebSocketContextEventArgs e) {
+            WebSocketMessage?.Invoke(this, e);
         }
 
         public async void CloseConnection() {
@@ -73,6 +67,9 @@ namespace Battleships.Board
         }
 
         private async void Connect() {
+            WsClient = new ClientWebSocket();
+            WsClient.Options.AddSubProtocol("bson");
+            WsClient.Options.SetRequestHeader("player", Settings.userId.ToString());
             await WsClient.ConnectAsync(new Uri("ws://" + Settings.serverUri), CancellationToken.None);
             Listener();
         }
@@ -122,7 +119,7 @@ namespace Battleships.Board
                     }
         }
         
-        public void JoinGame() {
+        public void JoinGame(int gameId) {
             Send(new Message(RequestType.JoinGame, new Dictionary<string, object> {{"gameJoinInfo", new GameJoinInfo(gameId, Settings.userId.ToString())}}));
         }
     }
