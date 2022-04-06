@@ -44,7 +44,6 @@ namespace Battleships.Menu
             var board = new GameBoard();
 
             board.PlaceShip((4, 3), (1,1));
-            Console.WriteLine(board.IsAvialiavle(7, 4));
             userId.Text = "Admiral #" + Settings.userId.ToString();
         }
 

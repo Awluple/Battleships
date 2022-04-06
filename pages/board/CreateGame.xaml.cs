@@ -122,6 +122,21 @@ namespace Battleships.Board
             Dictionary<string, JObject> data = Message.DeserializeData(e.message);
             JoinConfirmation opponent = data["confirmation"].ToObject<JoinConfirmation>();
 
+            
+            if(NavigationService == null) {
+                Loaded += redirect;
+            } else {
+                redirect();
+            }
+        }
+
+
+        public void redirect(object sender, RoutedEventArgs e) {
+            var page = new ShipsPlacement(this.game);
+            NavigationService.Navigate(page);
+        }
+
+        public void redirect() {
             var page = new ShipsPlacement(this.game);
             NavigationService.Navigate(page);
         }

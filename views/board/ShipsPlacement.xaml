@@ -7,6 +7,7 @@
     <ResourceDictionary>
         <ResourceDictionary.MergedDictionaries>
             <ResourceDictionary Source="../../styles/Buttons.xaml"/>
+            <ResourceDictionary Source="../../resources/images.xaml"/>
         </ResourceDictionary.MergedDictionaries> 
     </ResourceDictionary>
 </Page.Resources>
@@ -14,9 +15,9 @@
 
 <Grid VerticalAlignment="Center" HorizontalAlignment="Center" ShowGridLines="False">
     <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="100" />
+        <ColumnDefinition Width="50" />
         <ColumnDefinition Width="480" />
-        <ColumnDefinition Width="100"  />
+        <ColumnDefinition Width="250"  />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
         <RowDefinition Height="50" />
@@ -59,7 +60,37 @@
     
     </Grid>
 
-    <TextBlock FontSize="26" VerticalAlignment="Top" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="0">Place your ships</TextBlock>
+    <TextBlock FontSize="26" VerticalAlignment="Top" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="0">Place your ships:</TextBlock>
+
+    <Grid Grid.Column="2" Grid.Row="1">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="50" />
+            <ColumnDefinition Width="200" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="60" />
+            <RowDefinition Height="60" />
+            <RowDefinition Height="60" />
+            <RowDefinition Height="60" />
+            <RowDefinition Height="60" />
+        </Grid.RowDefinitions>
+
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" FontSize="26">Select:</TextBlock>
+        <Image Cursor="Hand" Grid.Row="1" Grid.Column="1" Height="60" Width="auto" Source="{StaticResource carrier}"/>
+        <Image Cursor="Hand" Grid.Row="2" Grid.Column="1" Height="45" Width="auto" Source="{StaticResource battleship}"/>
+        <Image Cursor="Hand" Grid.Row="3" Grid.Column="1" Height="43" Width="auto" Source="{StaticResource cruiser}"/>
+        <Image Cursor="Hand" Grid.Row="4" Grid.Column="1" Height="37" Width="auto" Source="{StaticResource destroyer}"/>
+        <Image Cursor="Hand" Grid.Row="5" Grid.Column="1" Height="25" Width="auto" Source="{StaticResource submarine}"/>
+
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0" FontSize="20" FontWeight="Bold">1/1</TextBlock>
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" FontSize="20" FontWeight="Bold">1/1</TextBlock>
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="3" Grid.Column="0" FontSize="20" FontWeight="Bold">1/1</TextBlock>
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="4" Grid.Column="0" FontSize="20" FontWeight="Bold">2/2</TextBlock>
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="5" Grid.Column="0" FontSize="20" FontWeight="Bold">2/2</TextBlock>
+
+        
+    </Grid>
 
 </Grid>
 
