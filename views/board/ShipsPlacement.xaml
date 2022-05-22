@@ -77,17 +77,17 @@
         </Grid.RowDefinitions>
 
         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" FontSize="26">Select:</TextBlock>
-        <Image Cursor="Hand" Grid.Row="1" Grid.Column="1" Height="60" Width="auto" Source="{StaticResource carrier}"/>
-        <Image Cursor="Hand" Grid.Row="2" Grid.Column="1" Height="45" Width="auto" Source="{StaticResource battleship}"/>
-        <Image Cursor="Hand" Grid.Row="3" Grid.Column="1" Height="43" Width="auto" Source="{StaticResource cruiser}"/>
-        <Image Cursor="Hand" Grid.Row="4" Grid.Column="1" Height="37" Width="auto" Source="{StaticResource destroyer}"/>
-        <Image Cursor="Hand" Grid.Row="5" Grid.Column="1" Height="25" Width="auto" Source="{StaticResource submarine}"/>
+        <Image x:Name="Carrier" MouseLeftButtonDown="changeShip" Tag="5" Cursor="Hand" Opacity="0.6" Grid.Row="1" Grid.Column="1" Height="60" Width="auto" Source="{StaticResource carrier}"/>
+        <Image x:Name="Battleship" MouseLeftButtonDown="changeShip" Tag="4" Cursor="Hand" Grid.Row="2" Grid.Column="1" Height="45" Width="auto" Source="{StaticResource battleship}"/>
+        <Image x:Name="Cruiser" MouseLeftButtonDown="changeShip" Tag="3" Cursor="Hand" Grid.Row="3" Grid.Column="1" Height="43" Width="auto" Source="{StaticResource cruiser}"/>
+        <Image x:Name="Destroyer" MouseLeftButtonDown="changeShip" Tag="2" Cursor="Hand" Grid.Row="4" Grid.Column="1" Height="37" Width="auto" Source="{StaticResource destroyer}"/>
+        <Image x:Name="Submarine" MouseLeftButtonDown="changeShip" Tag="1" Cursor="Hand" Grid.Row="5" Grid.Column="1" Height="25" Width="auto" Source="{StaticResource submarine}"/>
 
-        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0" FontSize="20" FontWeight="Bold">1/1</TextBlock>
-        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" FontSize="20" FontWeight="Bold">1/1</TextBlock>
-        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="3" Grid.Column="0" FontSize="20" FontWeight="Bold">1/1</TextBlock>
-        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="4" Grid.Column="0" FontSize="20" FontWeight="Bold">2/2</TextBlock>
-        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="5" Grid.Column="0" FontSize="20" FontWeight="Bold">2/2</TextBlock>
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0" FontSize="20" FontWeight="Bold" Text="{Binding shipsLeft[5], StringFormat={}{0}/1}"/>
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" FontSize="20" FontWeight="Bold" Text="{Binding shipsLeft[4], StringFormat={}{0}/1}"/>
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="3" Grid.Column="0" FontSize="20" FontWeight="Bold" Text="{Binding shipsLeft[3], StringFormat={}{0}/1}"/>
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="4" Grid.Column="0" FontSize="20" FontWeight="Bold" Text="{Binding shipsLeft[2], StringFormat={}{0}/2}"/>
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="5" Grid.Column="0" FontSize="20" FontWeight="Bold" Text="{Binding shipsLeft[1], StringFormat={}{0}/2}"/>
 
         
     </Grid>
