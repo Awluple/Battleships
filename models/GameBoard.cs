@@ -5,23 +5,6 @@ using System.Diagnostics;
 
 namespace Battleships.Board
 {
-    public enum ShipStatus
-    {
-        Empty = 0,
-        Healthy,
-        Damaged,
-        Destroyed,
-    }
-
-    public enum ShipsClasses
-    {
-        Carrier = 5,
-        Battleship = 4,
-        Cruiser = 3,
-        Destroyer = 2,
-        Submarine = 1,
-    }
-
     public struct Range
 {
     public Range(int x, int size)
@@ -61,16 +44,17 @@ namespace Battleships.Board
             }
         }
 
-        public bool CheckPlacement(ShipsClasses ship, int column, int row) {
+        public bool CheckPlacement(ShipsClasses ship, ShipOrientation orientation, int column, int row) {
             // Debug.WriteLine($"{row} - {column}");
             if(column == 0 || column == 12 || row == 0 || row == 12){
                  return false;
             };
 
-            if(column + (int)ship >= 12){
+            if(orientation == ShipOrientation.Vertical && column + (int)ship >= 12){
+                return false;
+            } else if (orientation == ShipOrientation.Horizontal && row + (int)ship >= 12){
                 return false;
             }
-
 
         return true;
         }

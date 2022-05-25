@@ -9,6 +9,7 @@
         </ImageBrush.ImageSource>
     </ImageBrush> -->
     <BitmapImage x:Key="backgroundPaper" UriSource="pack://siteoforigin:,,,/media/images/paper.jpg"/>
+    <BitmapImage x:Key="orientationArrow" UriSource="pack://siteoforigin:,,,/media/images/orientationArrow.png"/>
     <BitmapImage x:Key="carrier" UriSource="pack://siteoforigin:,,,/media/images/carrier.png"/>
     <BitmapImage x:Key="battleship" UriSource="pack://siteoforigin:,,,/media/images/battleship.png"/>
     <BitmapImage x:Key="cruiser" UriSource="pack://siteoforigin:,,,/media/images/cruiser.png"/>

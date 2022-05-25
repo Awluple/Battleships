@@ -28,6 +28,7 @@ namespace Battleships.Board
     {
         private Game game;
         private GameBoard board;
+        private ShipOrientation shipOrientation = ShipOrientation.Vertical;
         private ShipsClasses selectedShip = ShipsClasses.Carrier;
         Border[,] borders = new Border[10,10];
         public ShipsPlacement(Game game) {
@@ -55,34 +56,46 @@ namespace Battleships.Board
             return text;
         }
 
-        private void changeCellColor(Brush color, int column, int row) {
+        private void ChangeCellColor(Brush color, int column, int row) {
                 if(row <= 0 || column <= 0 || column >= 11 || row >= 11) { // ignore label cells
                     return;
                 }
                 borders[column - 1, row - 1].Background = color;
         }
 
+        private void RepaintArea(Border br, Brush color) {
+            int maxColumn = this.shipOrientation == ShipOrientation.Vertical ? (int)this.selectedShip + 1 : 2;
+            int maxRow = this.shipOrientation == ShipOrientation.Horizontal ? (int)this.selectedShip + 1 : 2;
+
+            for (int column = -1; column < maxColumn; column++) {
+                for (var row = -1; row < maxRow; row++) {
+                    ChangeCellColor(color, Grid.GetColumn(br) + column, Grid.GetRow(br) + row);
+                }
+            }
+        }
+
         private void over(object sender, MouseEventArgs e) {
             e.Handled = true;
             if(e.Source is Border) {
                 Border br = (Border)e.Source;
-                bool placeOk = this.board.CheckPlacement(selectedShip, Grid.GetColumn(br), Grid.GetRow(br));
+                bool placeOk = this.board.CheckPlacement(selectedShip, shipOrientation, Grid.GetColumn(br), Grid.GetRow(br));
 
-                var shipColor = Brushes.GreenYellow;
-                var areaColor = Brushes.YellowGreen;
+                Brush shipColor = Brushes.GreenYellow;
+                Brush areaColor = Brushes.YellowGreen;
                 if(!placeOk) {
                     shipColor = Brushes.OrangeRed;
                     areaColor = Brushes.Orange;
                 }
+                // Paint the area
+                RepaintArea(br, areaColor);
 
-                for (int column = -1; column < (int)this.selectedShip + 1; column++) {
-                    for (var row = -1; row < 2; row++) {
-                        changeCellColor(areaColor, Grid.GetColumn(br) + column, Grid.GetRow(br) + row);
-                    }
-                }
-
+                // Paint the ship
                 for (int i = 0; i < (int)this.selectedShip; i++) {
-                    changeCellColor(shipColor, Grid.GetColumn(br) + i, Grid.GetRow(br));
+                    if(this.shipOrientation == ShipOrientation.Vertical) {
+                        ChangeCellColor(shipColor, Grid.GetColumn(br) + i, Grid.GetRow(br));
+                    } else {
+                        ChangeCellColor(shipColor, Grid.GetColumn(br), Grid.GetRow(br) + i);
+                    }
                 }
             }
 
@@ -93,15 +106,23 @@ namespace Battleships.Board
             e.Handled = true;
             if(e.Source is Border) {
                 Border br = (Border)e.Source;
-                // changeCellColor(Brushes.LightBlue, Grid.GetColumn(br), Grid.GetRow(br));
-                // for (int i = 0; i < (int)this.selectedShip; i++) {
-                //     changeCellColor(Brushes.LightBlue, Grid.GetColumn(br) + i, Grid.GetRow(br));
-                // }
-                for (int column = -1; column < (int)this.selectedShip + 1; column++) {
-                    for (var row = -1; row < 2; row++) {
-                        changeCellColor(Brushes.LightBlue, Grid.GetColumn(br) + column, Grid.GetRow(br) + row);
-                    }
-                }
+                RepaintArea(br, Brushes.LightBlue);
+            }
+        }
+
+        private void ChangeOrientation(object sender, MouseEventArgs e) {
+            if(this.shipOrientation == ShipOrientation.Horizontal) {
+                this.shipOrientation = ShipOrientation.Vertical;
+                RotateTransform rotateTransform = new RotateTransform(90);
+                rotateTransform.CenterX = 40;
+                rotateTransform.CenterY = 40;
+                orientationImage.RenderTransform = rotateTransform;
+            } else {
+                this.shipOrientation = ShipOrientation.Horizontal;
+                RotateTransform rotateTransform = new RotateTransform(0);
+                rotateTransform.CenterX = 40;
+                rotateTransform.CenterY = 40;
+                orientationImage.RenderTransform = rotateTransform;
             }
         }
 

@@ -22,6 +22,7 @@
     <Grid.RowDefinitions>
         <RowDefinition Height="50" />
         <RowDefinition Height="*" />
+        <RowDefinition Height="200" />
     </Grid.RowDefinitions>
 
     <Grid x:Name="boardGrid" Grid.Column="1" Grid.Row="1">
@@ -59,7 +60,7 @@
         BorderThickness="2"></Border>
     
     </Grid>
-
+    <!-- Ships selection menu -->
     <TextBlock FontSize="26" VerticalAlignment="Top" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="0">Place your ships:</TextBlock>
 
     <Grid Grid.Column="2" Grid.Row="1">
@@ -88,8 +89,24 @@
         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="3" Grid.Column="0" FontSize="20" FontWeight="Bold" Text="{Binding shipsLeft[3], StringFormat={}{0}/1}"/>
         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="4" Grid.Column="0" FontSize="20" FontWeight="Bold" Text="{Binding shipsLeft[2], StringFormat={}{0}/2}"/>
         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="5" Grid.Column="0" FontSize="20" FontWeight="Bold" Text="{Binding shipsLeft[1], StringFormat={}{0}/2}"/>
+    </Grid>
 
-        
+    <!-- Ship placement orientation -->
+    <Grid Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="90" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+
+        <Image x:Name="orientationImage" Height="80" MouseLeftButtonDown="ChangeOrientation" Grid.Row="0" Grid.Column="0" Cursor="Hand" Source="{StaticResource orientationArrow}">
+            <Image.RenderTransform>
+                <RotateTransform Angle="90" CenterX="40" CenterY="40" />
+            </Image.RenderTransform>
+        </Image>
+        <TextBlock MouseLeftButtonDown="ChangeOrientation" Cursor="Hand" FontSize="28" Grid.Row="1" Grid.Column="0">Orientation</TextBlock>
     </Grid>
 
 </Grid>
