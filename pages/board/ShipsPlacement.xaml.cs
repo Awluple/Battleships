@@ -60,6 +60,9 @@ namespace Battleships.Board
                 if(row <= 0 || column <= 0 || column >= 11 || row >= 11) { // ignore label cells
                     return;
                 }
+                if(this.board.IsOccupied(column- 1, row - 1)) {
+                    return;
+                }
                 borders[column - 1, row - 1].Background = color;
         }
 
@@ -76,9 +79,12 @@ namespace Battleships.Board
 
         private void over(object sender, MouseEventArgs e) {
             e.Handled = true;
+            if(this.board.shipsLeft[selectedShip] == 0) {
+                return;
+            }
             if(e.Source is Border) {
                 Border br = (Border)e.Source;
-                bool placeOk = this.board.CheckPlacement(selectedShip, shipOrientation, Grid.GetColumn(br), Grid.GetRow(br));
+                bool placeOk = this.board.CheckPlacement(selectedShip, shipOrientation, Grid.GetColumn(br) - 1, Grid.GetRow(br) - 1);
 
                 Brush shipColor = Brushes.GreenYellow;
                 Brush areaColor = Brushes.YellowGreen;
@@ -98,8 +104,6 @@ namespace Battleships.Board
                     }
                 }
             }
-
-            
         }
 
         private void leaves(object sender, MouseEventArgs e) {
@@ -110,7 +114,23 @@ namespace Battleships.Board
             }
         }
 
-        private void ChangeOrientation(object sender, MouseEventArgs e) {
+        private void PlaceShip(object sender, MouseEventArgs e) {
+            e.Handled = true;
+            if(e.Source is Border) {
+                Border br = (Border)e.Source;
+                this.board.PlaceShip(this.selectedShip, this.shipOrientation,Grid.GetColumn(br) - 1, Grid.GetRow(br) - 1);
+            };
+        }
+
+         private void ChangeOrientation(object sender, MouseEventArgs e) {
+            this.Rotate();
+         }
+
+         private void ChangeOrientation() {
+            this.Rotate();
+         }
+
+        private void Rotate() {
             if(this.shipOrientation == ShipOrientation.Horizontal) {
                 this.shipOrientation = ShipOrientation.Vertical;
                 RotateTransform rotateTransform = new RotateTransform(90);
@@ -127,6 +147,9 @@ namespace Battleships.Board
         }
 
         private void SelectShip(ShipsClasses newShip) {
+            if(this.board.shipsLeft[newShip] == 0) {
+                return;
+            }
             // remove opacity from the currently selected ship
             string name = this.selectedShip.ToString();
             var ship = (Image)this.FindName(name);
@@ -185,6 +208,7 @@ namespace Battleships.Board
             {
                 item.MouseEnter += over;
                 item.MouseLeave += leaves;
+                item.MouseLeftButtonDown += PlaceShip;
             }
         }
     }

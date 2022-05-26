@@ -1,29 +1,26 @@
-using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 
 using System.Diagnostics;
 
 namespace Battleships.Board
 {
-    public struct Range
-{
-    public Range(int x, int size)
-    {
-        min = x - size;
-        max = x + size;
-    }
-
-    public int min { get; }
-    public int max { get; }
-
-    public override string ToString() => $"({min}, {max})";
-}
-
-    public class GameBoard
+    public class GameBoard : INotifyPropertyChanged 
     {
         private ShipStatus[,] board = new ShipStatus[12,12];
 
-        public Dictionary<ShipsClasses,int> shipsLeft {get; set;}
+        private Dictionary<ShipsClasses,int> _shipsLeft {get; set;}
+
+        public Dictionary<ShipsClasses,int> shipsLeft
+        {
+            get { return _shipsLeft; }
+            set
+            {
+                _shipsLeft = value;
+                OnPropertyChanged();
+            }
+        }
 
         public GameBoard() {
             this.shipsLeft = new Dictionary<ShipsClasses, int> {
@@ -33,53 +30,84 @@ namespace Battleships.Board
             {ShipsClasses.Destroyer, 2},
             {ShipsClasses.Submarine, 2}
         };
-            this.board[5,5] = ShipStatus.Healthy;
         }
 
-        private int GetSize((int row, int column) startPoint, (int row, int column) endPoint) {
-            if(startPoint.row != endPoint.row) {
-                return (startPoint.column > endPoint.column ? startPoint.column - endPoint.column : endPoint.column - startPoint.column) + 1;
-            } else {
-                return (startPoint.row > endPoint.row ? startPoint.row - endPoint.row : endPoint.row - startPoint.row) + 1;
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
-        }
 
         public bool CheckPlacement(ShipsClasses ship, ShipOrientation orientation, int column, int row) {
-            // Debug.WriteLine($"{row} - {column}");
-            if(column == 0 || column == 12 || row == 0 || row == 12){
+            if(column < 0 || row < 0){
                  return false;
             };
 
-            if(orientation == ShipOrientation.Vertical && column + (int)ship >= 12){
+            if(orientation == ShipOrientation.Vertical && column + (int)ship > 10){
                 return false;
-            } else if (orientation == ShipOrientation.Horizontal && row + (int)ship >= 12){
+            } else if (orientation == ShipOrientation.Horizontal && row + (int)ship > 10){
+                return false;
+            }
+
+            if(!IsAvialiavle(ship, orientation, column, row)) {
                 return false;
             }
 
         return true;
         }
 
-        public bool IsAvialiavle(int row, int column) {
+        public bool IsAvialiavle(ShipsClasses ship, ShipOrientation orientation, int column, int row) {
             for (var rowIndex = row - 1; rowIndex <= row + 1; rowIndex++) {
-                Debug.Write($"Row: {row} - Index: {rowIndex}\n");
                 for (var columnIndex = column - 1; columnIndex <= column + 1; columnIndex++) {
-                    if(columnIndex < 0 || columnIndex > 11 || rowIndex < 0 || rowIndex > 11) return true;
-                    if(board[rowIndex, columnIndex] != ShipStatus.Empty){
-                        Debug.WriteLine($"{rowIndex} - {columnIndex}");
+                    if(columnIndex < 0 || columnIndex > 11 || rowIndex < 0 || rowIndex > 11) continue;
+                    if(board[columnIndex, rowIndex] != ShipStatus.Empty){
                         return false;
                     };
                 }
             }
+            for(int i = 1; i <= (int)ship; i++) {
+                int newCol = orientation == ShipOrientation.Vertical ? column + i : column;
+                int newRow = orientation == ShipOrientation.Horizontal ? row + i : row;
+                for (var j = -1; j <= 1; j++) {
+
+                    int columnIndex = orientation == ShipOrientation.Horizontal ? newCol + j : newCol;
+                    int rowIndex = orientation == ShipOrientation.Vertical ? newRow + j : newRow;
+
+                    if(columnIndex < 0 || columnIndex > 11 || rowIndex < 0 || rowIndex > 11) continue;
+
+                    if(board[columnIndex, rowIndex] != ShipStatus.Empty){
+                        return false;
+                    };
+                }
+            }
+            
             return true;
         }
 
-        public bool PlaceShip((int row, int column) startPoint, (int row, int column) endPoint) {
-            int size = GetSize(startPoint, endPoint);
+        public bool IsOccupied(int column, int row) {
+            return this.board[column, row] != ShipStatus.Empty;
+        }
 
-            ShipsClasses shipType = (ShipsClasses)size;
-            
-            // board[startPoint.row, startPoint.column] = ShipStatus.Healthy;
+        public bool PlaceShip(ShipsClasses ship, ShipOrientation orientation, int column, int row) {
+            if(this.shipsLeft[ship] == 0) {
+                return false;
+            }
+            int size = (int)ship;
 
+            if(!CheckPlacement(ship, orientation, column, row)) {
+                return false;
+            }
+
+            for(int i = 0; i < size; i++) {
+                int col = orientation == ShipOrientation.Vertical ? column + i : column;
+                int ro = orientation == ShipOrientation.Horizontal ? row + i : row;
+                board[col, ro] = ShipStatus.Healthy;
+            }
+
+            var left = this.shipsLeft;
+            left[ship] = left[ship] - 1;
+
+            this.shipsLeft = left; 
 
             return true;
         }

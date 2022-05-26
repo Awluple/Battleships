@@ -41,9 +41,6 @@ namespace Battleships.Menu
         {
             InitializeComponent();
 
-            var board = new GameBoard();
-
-            board.PlaceShip((4, 3), (1,1));
             userId.Text = "Admiral #" + Settings.userId.ToString();
         }
 
