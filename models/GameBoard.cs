@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 
+using System;
 using System.Diagnostics;
 
 namespace Battleships.Board
@@ -32,11 +33,23 @@ namespace Battleships.Board
         };
         }
 
-            public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
-            protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public int[,] SerializeBoard() {
+            int[,] serialized = new int[10,10];
+
+            for (var col = 0; col < 10; col++) {
+                for (var row = 0; row < 10; row++) {
+                    serialized[row, col] = board[row, col] == ShipStatus.Empty ? 0 : 1;
+                }
             }
+
+            return serialized;
+        }
 
         public bool CheckPlacement(ShipsClasses ship, ShipOrientation orientation, int column, int row) {
             if(column < 0 || row < 0){
@@ -59,8 +72,8 @@ namespace Battleships.Board
         public bool IsAvialiavle(ShipsClasses ship, ShipOrientation orientation, int column, int row) {
             for (var rowIndex = row - 1; rowIndex <= row + 1; rowIndex++) {
                 for (var columnIndex = column - 1; columnIndex <= column + 1; columnIndex++) {
-                    if(columnIndex < 0 || columnIndex > 11 || rowIndex < 0 || rowIndex > 11) continue;
-                    if(board[columnIndex, rowIndex] != ShipStatus.Empty){
+                    if(columnIndex < 0 || columnIndex >= 11 || rowIndex < 0 || rowIndex >= 11) continue;
+                    if(board[rowIndex, columnIndex] != ShipStatus.Empty){
                         return false;
                     };
                 }
@@ -75,7 +88,7 @@ namespace Battleships.Board
 
                     if(columnIndex < 0 || columnIndex > 11 || rowIndex < 0 || rowIndex > 11) continue;
 
-                    if(board[columnIndex, rowIndex] != ShipStatus.Empty){
+                    if(board[rowIndex, columnIndex] != ShipStatus.Empty){
                         return false;
                     };
                 }
@@ -85,7 +98,7 @@ namespace Battleships.Board
         }
 
         public bool IsOccupied(int column, int row) {
-            return this.board[column, row] != ShipStatus.Empty;
+            return this.board[row, column] != ShipStatus.Empty;
         }
 
         public bool PlaceShip(ShipsClasses ship, ShipOrientation orientation, int column, int row) {
@@ -101,7 +114,7 @@ namespace Battleships.Board
             for(int i = 0; i < size; i++) {
                 int col = orientation == ShipOrientation.Vertical ? column + i : column;
                 int ro = orientation == ShipOrientation.Horizontal ? row + i : row;
-                board[col, ro] = ShipStatus.Healthy;
+                board[ro, col] = ShipStatus.Healthy;
             }
 
             var left = this.shipsLeft;

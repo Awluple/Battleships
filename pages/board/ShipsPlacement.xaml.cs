@@ -30,6 +30,8 @@ namespace Battleships.Board
         private GameBoard board;
         private ShipOrientation shipOrientation = ShipOrientation.Vertical;
         private ShipsClasses selectedShip = ShipsClasses.Carrier;
+        private int shipsLeft = 7;
+
         Border[,] borders = new Border[10,10];
         public ShipsPlacement(Game game) {
             InitializeComponent();
@@ -118,7 +120,16 @@ namespace Battleships.Board
             e.Handled = true;
             if(e.Source is Border) {
                 Border br = (Border)e.Source;
-                this.board.PlaceShip(this.selectedShip, this.shipOrientation,Grid.GetColumn(br) - 1, Grid.GetRow(br) - 1);
+                bool placeOk = this.board.PlaceShip(this.selectedShip, this.shipOrientation,Grid.GetColumn(br) - 1, Grid.GetRow(br) - 1);
+                RepaintArea(br, Brushes.LightBlue);
+                if(placeOk) {
+                    this.shipsLeft--;
+                }
+
+                if(this.shipsLeft == 0) {
+                    game.SendBoard(board);
+                    this.shipsLeft = -1;
+                }
             };
         }
 

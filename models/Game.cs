@@ -3,7 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Threading;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -121,6 +121,11 @@ namespace Battleships.Board
         
         public void JoinGame(int gameId) {
             Send(new Message(RequestType.JoinGame, new Dictionary<string, object> {{"gameJoinInfo", new GameJoinInfo(gameId, Settings.userId.ToString())}}));
+        }
+
+        public void SendBoard(GameBoard board) {
+
+            Send(new Message(RequestType.SetBoard, new Dictionary<string, object> {{"userBoard", new UserBoard(board.SerializeBoard(), gameId)}}));
         }
     }
 }
