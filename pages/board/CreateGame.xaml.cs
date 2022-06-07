@@ -143,8 +143,8 @@ namespace Battleships.Board
 
         private void JoinCreatedGame(int gameId) {
             Game.WebSocketMessage += this.GetConfirmation;
-            this.game = new Game();
-            game.JoinGame(gameId);
+            this.game = new Game(gameId);
+            game.JoinGame();
         }
     }
 }

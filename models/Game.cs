@@ -44,13 +44,14 @@ namespace Battleships.Board
     public class Game
     {
         public static string opponent = null;
-        public static int gameId;
+        public int gameId;
 
         private static ClientWebSocket WsClient;
 
         public static event EventHandler<WebSocketContextEventArgs> WebSocketMessage;
 
-        public Game() {
+        public Game(int gameId) {
+            this.gameId = gameId;
             if(WsClient == null) {
                 Connect();
             }
@@ -119,7 +120,7 @@ namespace Battleships.Board
                     }
         }
         
-        public void JoinGame(int gameId) {
+        public void JoinGame() {
             Send(new Message(RequestType.JoinGame, new Dictionary<string, object> {{"gameJoinInfo", new GameJoinInfo(gameId, Settings.userId.ToString())}}));
         }
 

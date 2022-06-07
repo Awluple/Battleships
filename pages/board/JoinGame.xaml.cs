@@ -38,8 +38,8 @@ namespace Battleships.Board
 
         private void Join(object sender, RoutedEventArgs e) {
             Game.WebSocketMessage += this.GetConfirmation;
-            this.game = new Game();
-            this.game.JoinGame(this.gameId);
+            this.game = new Game(this.gameId);
+            this.game.JoinGame();
         }
 
         private void GetConfirmation(object sender, WebSocketContextEventArgs e) {
