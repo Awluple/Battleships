@@ -4,7 +4,8 @@ using System.Net;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
+using System.Windows.Threading;
 using System.Windows;
 using System.Diagnostics;
 using System.Windows.Controls;
@@ -31,6 +32,8 @@ namespace Battleships.Board
         private ShipOrientation shipOrientation = ShipOrientation.Vertical;
         private ShipsClasses selectedShip = ShipsClasses.Carrier;
         private int shipsLeft = 7;
+
+        private DispatcherTimer dispatcherTimer;
 
         Border[,] borders = new Border[10,10];
         public ShipsPlacement(Game game) {
@@ -127,10 +130,49 @@ namespace Battleships.Board
                 }
 
                 if(this.shipsLeft == 0) {
+                    Game.WebSocketMessage += this.StartGame;
                     game.SendBoard(board);
                     this.shipsLeft = -1;
+
+                    orientationImage.Visibility = Visibility.Hidden;
+                    orientationText.Visibility = Visibility.Hidden;
+                    waitingText.Visibility = Visibility.Visible;
+                    dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+                    dispatcherTimer.Tick += new EventHandler(UpdateWaiting);
+                    dispatcherTimer.Interval = new TimeSpan(0,0,0,0,800);
+                    dispatcherTimer.Start();
                 }
             };
+        }
+        private void UpdateWaiting(object sender, EventArgs e)
+        {
+            if(waitingText.Text.Length >= 27) {
+                waitingText.Text = "Waiting for the opponent.";
+            } else {
+                waitingText.Text = waitingText.Text + ".";
+            }
+        }
+
+        private void StartGame(object sender, WebSocketContextEventArgs e)
+        {
+            if(e.message.requestType != RequestType.GameReady) {
+                return;
+            }
+            dispatcherTimer.Stop();
+            if(NavigationService == null) {
+                Loaded += redirect;
+            } else {
+                redirect();
+            }  
+        }
+
+        private void redirect(object sender, RoutedEventArgs e) {
+            var page = new MainBoard(this.game, this.board);
+            NavigationService.Navigate(page);
+        }
+        private void redirect() {
+            var page = new MainBoard(this.game, this.board);
+            NavigationService.Navigate(page);
         }
 
          private void ChangeOrientation(object sender, MouseEventArgs e) {

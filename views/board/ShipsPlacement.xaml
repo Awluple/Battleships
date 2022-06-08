@@ -107,7 +107,9 @@
                 <RotateTransform Angle="90" CenterX="40" CenterY="40" />
             </Image.RenderTransform>
         </Image>
-        <TextBlock MouseLeftButtonDown="ChangeOrientation" Cursor="Hand" FontSize="28" Grid.Row="1" Grid.Column="0">Orientation</TextBlock>
+        <TextBlock HorizontalAlignment="Center" x:Name="orientationText" MouseLeftButtonDown="ChangeOrientation" Cursor="Hand" FontSize="28" Grid.Row="1" Grid.Column="0">Orientation</TextBlock>
+
+        <TextBlock HorizontalAlignment="Stretch" Visibility="Hidden" x:Name="waitingText" FontSize="36" Grid.Row="1" Grid.Column="0">Waiting for the opponent.</TextBlock>
     </Grid>
 
 </Grid>
