@@ -125,8 +125,11 @@ namespace Battleships.Board
         }
 
         public void SendBoard(GameBoard board) {
-
             Send(new Message(RequestType.SetBoard, new Dictionary<string, object> {{"userBoard", new UserBoard(board.SerializeBoard(), gameId)}}));
+        }
+
+        public void Shot(int row, int column) {
+            Send(new Message(RequestType.PlayerShot, new Dictionary<string, object> {{"shot", new Shot(column, row, Settings.userId, gameId)}}));
         }
     }
 }

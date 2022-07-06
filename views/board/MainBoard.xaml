@@ -1,8 +1,7 @@
-<Page
-    x:Class="Battleships.Board.MainBoard"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    >
+<src:BoardPage x:Class="Battleships.Board.MainBoard"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:src="clr-namespace:Battleships.Board">
 
 <Page.Resources>
     <ResourceDictionary>
@@ -16,76 +15,90 @@
 
 <Grid HorizontalAlignment="Center" VerticalAlignment="Center" ShowGridLines="False">
     <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="50" />
+        <ColumnDefinition Width="40" />
         <ColumnDefinition Width="480" />
         <ColumnDefinition Width="250"  />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
-        <RowDefinition Height="20" />
+        <RowDefinition Height="50" />
         <RowDefinition Height="*" />
-        <RowDefinition Height="25" />
+        <RowDefinition Height="50" />
         <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
-    <Grid HorizontalAlignment="Center" ShowGridLines="true" x:Name="playerGrid" Grid.Column="1" Grid.Row="1">
+    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Grid.Column="1" Grid.Row="0">Enemy board:</TextBlock>
+
+    <Grid HorizontalAlignment="Center" ShowGridLines="false" x:Name="opponentGrid" Grid.Column="1" Grid.Row="1">
          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="35" />
-            <ColumnDefinition Width="35" />
-            <ColumnDefinition Width="35" />
-            <ColumnDefinition Width="35" />
-            <ColumnDefinition Width="35" />
-            <ColumnDefinition Width="35" />
-            <ColumnDefinition Width="35" />
-            <ColumnDefinition Width="35" />
-            <ColumnDefinition Width="35" />
-            <ColumnDefinition Width="35" />
-            <ColumnDefinition Width="35" />
-            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="35" />
-            <RowDefinition Height="35" />
-            <RowDefinition Height="35" />
-            <RowDefinition Height="35" />
-            <RowDefinition Height="35" />
-            <RowDefinition Height="35" />
-            <RowDefinition Height="35" />
-            <RowDefinition Height="35" />
-            <RowDefinition Height="35" />
-            <RowDefinition Height="35" />
-            <RowDefinition Height="35" />
-            <RowDefinition Height="35" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions> 
+    </Grid>
+
+    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Grid.Column="1" Grid.Row="2">Your board:</TextBlock>
+
+        <Grid HorizontalAlignment="Center" ShowGridLines="false" x:Name="playerGrid" Grid.Column="1" Grid.Row="4">
+         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="40" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
         </Grid.RowDefinitions> 
     </Grid>
-        <Grid HorizontalAlignment="Center" ShowGridLines="true" x:Name="opponentGrid" Grid.Column="1" Grid.Row="4">
-         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
+
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3" Grid.Row="1"  ShowGridLines="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
         </Grid.RowDefinitions> 
+
+        <TextBlock x:Name="turnInfo" FontSize="30" FontWeight="Medium" Grid.Row="0" Grid.Column="0" Grid.RowSpan="1">Your Turn</TextBlock>
+        <TextBlock x:Name="hitInfo" FontSize="30" FontWeight="Medium" Grid.Row="1" Grid.Column="0" Grid.RowSpan="1"></TextBlock>
     </Grid>
 </Grid>
-</Page>
+</src:BoardPage>

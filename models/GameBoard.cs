@@ -2,8 +2,6 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 
-using System;
-using System.Diagnostics;
 
 namespace Battleships.Board
 {
@@ -70,6 +68,7 @@ namespace Battleships.Board
         }
 
         public bool IsAvialiavle(ShipsClasses ship, ShipOrientation orientation, int column, int row) {
+            //check first 3x3 area
             for (var rowIndex = row - 1; rowIndex <= row + 1; rowIndex++) {
                 for (var columnIndex = column - 1; columnIndex <= column + 1; columnIndex++) {
                     if(columnIndex < 0 || columnIndex >= 11 || rowIndex < 0 || rowIndex >= 11) continue;
@@ -78,6 +77,7 @@ namespace Battleships.Board
                     };
                 }
             }
+            //check the text 1x3 area for every ship segment
             for(int i = 1; i <= (int)ship; i++) {
                 int newCol = orientation == ShipOrientation.Vertical ? column + i : column;
                 int newRow = orientation == ShipOrientation.Horizontal ? row + i : row;
