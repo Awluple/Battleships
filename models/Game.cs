@@ -124,7 +124,7 @@ namespace Battleships.Board
             Send(new Message(RequestType.JoinGame, new Dictionary<string, object> {{"gameJoinInfo", new GameJoinInfo(gameId, Settings.userId.ToString())}}));
         }
 
-        public void SendBoard(GameBoard board) {
+        public void SendBoard(PlayerBoard board) {
             Send(new Message(RequestType.SetBoard, new Dictionary<string, object> {{"userBoard", new UserBoard(board.SerializeBoard(), gameId)}}));
         }
 

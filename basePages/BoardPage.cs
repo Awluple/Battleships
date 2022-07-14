@@ -21,16 +21,16 @@ namespace Battleships.Board
     public partial class BoardPage : Page
     {
         protected virtual Game game {get; set;}
-        protected virtual GameBoard board {get; set;}
+        protected virtual PlayerBoard board {get; set;}
         public BoardPage(Game game) {
             this.game = game;
         }
 
-        protected void ChangeCellColor(Border[,] borders, Brush color, int column, int row, bool ignoreOccupation = false) {
+        protected void ChangeCellColor(PlayerBoard playerBoard, Border[,] borders, Brush color, int column, int row, bool ignoreOccupation = false) {
             if(row <= 0 || column <= 0 || column >= 11 || row >= 11) { // ignore label cells
                 return;
             }
-            if(!ignoreOccupation && this.board.IsOccupied(column - 1, row - 1)) {
+            if(!ignoreOccupation && playerBoard.getOccupation(column - 1, row - 1) != ShipStatus.Empty) {
                 return;
             }
             borders[column - 1, row - 1].Background = color;

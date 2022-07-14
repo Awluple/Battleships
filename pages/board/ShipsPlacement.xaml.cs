@@ -37,7 +37,7 @@ namespace Battleships.Board
         public ShipsPlacement(Game game) : base(game) {
             InitializeComponent();
             this.game = game;
-            this.board = new GameBoard();
+            this.board = new PlayerBoard();
             this.borders = this.CreateGrid(boardGrid);
             this.AddEvents();
             this.DataContext = board;
@@ -49,7 +49,7 @@ namespace Battleships.Board
 
             for (int column = -1; column < maxColumn; column++) {
                 for (var row = -1; row < maxRow; row++) {
-                    ChangeCellColor(borders, color, Grid.GetColumn(br) + column, Grid.GetRow(br) + row);
+                    ChangeCellColor(this.board, borders, color, Grid.GetColumn(br) + column, Grid.GetRow(br) + row);
                 }
             }
         }
@@ -75,9 +75,9 @@ namespace Battleships.Board
                 // Paint the ship
                 for (int i = 0; i < (int)this.selectedShip; i++) {
                     if(this.shipOrientation == ShipOrientation.Vertical) {
-                        ChangeCellColor(borders, shipColor, Grid.GetColumn(br) + i, Grid.GetRow(br));
+                        ChangeCellColor(this.board,borders, shipColor, Grid.GetColumn(br) + i, Grid.GetRow(br));
                     } else {
-                        ChangeCellColor(borders, shipColor, Grid.GetColumn(br), Grid.GetRow(br) + i);
+                        ChangeCellColor(this.board,borders, shipColor, Grid.GetColumn(br), Grid.GetRow(br) + i);
                     }
                 }
             }
