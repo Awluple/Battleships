@@ -64,6 +64,7 @@ namespace Battleships.Board
         public async void CloseConnection() {
             if(WsClient.State == WebSocketState.Open){
                 await WsClient.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
+                Debug.WriteLine("Websocket connection closed");
             }
         }
 
@@ -72,6 +73,7 @@ namespace Battleships.Board
             WsClient.Options.AddSubProtocol("bson");
             WsClient.Options.SetRequestHeader("player", Settings.userId.ToString());
             await WsClient.ConnectAsync(new Uri("ws://" + Settings.serverUri), CancellationToken.None);
+            Debug.WriteLine("Connected to the Websocket Server");
             Listener();
         }
 
@@ -85,6 +87,7 @@ namespace Battleships.Board
                             JsonSerializer serializer = new JsonSerializer();
                             serializer.Serialize(datawriter, message);
                             await WsClient.SendAsync(new ArraySegment<byte>(ms.ToArray()), WebSocketMessageType.Binary, true, CancellationToken.None);
+                            Debug.WriteLine($"Data sent - {message.requestType}");
                         }
                         catch (System.Exception ex)
                         {
@@ -110,6 +113,7 @@ namespace Battleships.Board
                             {
                                 JsonSerializer serializer = new JsonSerializer();
                                 message = serializer.Deserialize<Message>(reader);
+                                Debug.WriteLine($"Data recieved - {message.requestType}");
                                 this.OnWebSocketMessage(new WebSocketContextEventArgs(receiveBuffer.Array));
                             }
                         }
@@ -129,6 +133,7 @@ namespace Battleships.Board
         }
 
         public void Shot(int row, int column) {
+            Debug.WriteLine($"Sending shot data: Column: {column}, Row: {row}");
             Send(new Message(RequestType.PlayerShot, new Dictionary<string, object> {{"shot", new Shot(column, row, Settings.userId, gameId)}}));
         }
     }

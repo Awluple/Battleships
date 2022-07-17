@@ -145,6 +145,9 @@ namespace Battleships.Board
                 if(br.Background == Brushes.Gray || br.Background == Brushes.Orange) {
                     return;
                 }
+                if(Grid.GetRow(br) == 0 || Grid.GetColumn(br) == 0) {
+                    return;
+                }
                 lockShooting = true;
                 this.game.Shot(Grid.GetRow(br) - 1, Grid.GetColumn(br) - 1);
             }
