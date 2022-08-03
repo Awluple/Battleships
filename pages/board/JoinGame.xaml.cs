@@ -33,12 +33,12 @@ namespace Battleships.Board
             InitializeComponent();
             this.gameId = gameId;
             Loaded += Join;
-            
         }
 
-        private void Join(object sender, RoutedEventArgs e) {
+        private async void Join(object sender, RoutedEventArgs e) {
             Game.WebSocketMessage += this.GetConfirmation;
             this.game = new Game(this.gameId);
+            await game.Connect();
             this.game.JoinGame();
         }
 

@@ -25,6 +25,8 @@
         <RowDefinition Height="200" />
     </Grid.RowDefinitions>
 
+    <Frame NavigationUIVisibility="Hidden" JournalOwnership="UsesParentJournal" Source="./ConnectionLost.xaml" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="100" Grid.RowSpan="100" x:Name="Disconnected_Overlay" Visibility="Hidden" Panel.ZIndex="1000"></Frame>
+
     <Grid x:Name="boardGrid" Grid.Column="1" Grid.Row="1">
          <Grid.ColumnDefinitions>
             <ColumnDefinition Width="40" />

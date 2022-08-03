@@ -34,19 +34,29 @@ namespace Battleships.Board
 
         public MainBoard(Game game, PlayerBoard gameBoard, bool isStartingPlayer) : base(game) {
             InitializeComponent();
+            Game.WebSocketMessage += this.EnemyDisconnected;
+
             this.board = gameBoard;
             this.opponentBorders = this.CreateGrid(opponentGrid);
             this.playerBorders = this.CreateGrid(playerGrid);
+
             this.AddEvents();
             setTurnInfo(isStartingPlayer);
             paintPlayerBoard();
+
             this.DataContext = board;
             this.playerTurn = isStartingPlayer;
             Application.Current.MainWindow.Height = 1200;
             Game.WebSocketMessage += this.GetShotResult;
+
             if(!isStartingPlayer) {
                 lockShooting = true;
             }
+        }
+        private void EnemyDisconnected(object sender, WebSocketContextEventArgs e) {
+            if(e.message.requestType != RequestType.OpponentConnectionLost) return;
+            Game.WebSocketMessage -= this.EnemyDisconnected;
+            Disconnected_Overlay.Visibility = Visibility.Visible;
         }
 
         private void setTurnInfo(bool isPlayerTurn) {
@@ -95,16 +105,25 @@ namespace Battleships.Board
         }
 
         private void GetShotResult(object sender, WebSocketContextEventArgs e) {
-            if(!(e.message.requestType == RequestType.ShotResult)) return;
+            if(!(e.message.requestType == RequestType.ShotResult || e.message.requestType == RequestType.GameResult)) return;
             Dictionary<string, JObject> data = Message.DeserializeData(e.message);
-            ShotResult result = data["shotResult"].ToObject<ShotResult>();
-            PlayerBoard board = !playerTurn ? this.board : this.opponentBoard;
+
+            PlayerBoard activeBoard = !playerTurn ? this.board : this.opponentBoard;
             Border[,] borders = !playerTurn ? this.playerBorders : this.opponentBorders;
+
+            if(e.message.requestType == RequestType.GameResult) {
+                GameResult gameResult = data["gameResult"].ToObject<GameResult>();
+                this.MarkAsDestroyed(gameResult.column, gameResult.row, activeBoard, borders);
+                this.FinishGame(gameResult);
+                return;
+            }
+
+            ShotResult result = data["shotResult"].ToObject<ShotResult>();
 
             if(result.shotStatus == ShotStatus.Miss){
                 hitInfo.Text = "Miss!";
                 setTurnInfo(!playerTurn);
-                ChangeCellColor(board, borders, Brushes.Gray, result.column + 1, result.row + 1, true);
+                ChangeCellColor(activeBoard, borders, Brushes.Gray, result.column + 1, result.row + 1, true);
                 if(playerTurn) {
                     lockShooting = true;
                     playerTurn = false;
@@ -116,23 +135,42 @@ namespace Battleships.Board
             } else {
                 if(result.shotStatus == ShotStatus.Hit) {
                     hitInfo.Text = "Hit!";
-                    board.Update(result.column, result.row, ShotStatus.Hit);
-                    ChangeCellColor(board, borders, Brushes.Orange, result.column + 1, result.row + 1, true);
+                    activeBoard.Update(result.column, result.row, ShotStatus.Hit);
+                    ChangeCellColor(activeBoard, borders, Brushes.Orange, result.column + 1, result.row + 1, true);
                 } else if(result.shotStatus == ShotStatus.Destroyed) {
-                    hitInfo.Text = "Destroyed!";
-                    
-                    List<Coords> destroyedShipCoords = board.GetShipCoords(result.column, result.row);
-                    foreach (Coords coord in destroyedShipCoords)
-                    {
-                        board.Update(coord.Column, coord.Row, ShotStatus.Destroyed);
-                        ChangeCellColor(board, borders, Brushes.OrangeRed, coord.Column + 1, coord.Row + 1, true);
-                    }
+                    this.MarkAsDestroyed(result.column, result.row, activeBoard, borders);
                 }
                 if(playerTurn) {
                     lockShooting = false;
                 }
             }
 
+        }
+
+        private void MarkAsDestroyed(int column, int row, PlayerBoard activeBoard, Border[,] borders) {
+            hitInfo.Text = "Destroyed!";
+                    
+            List<Coords> destroyedShipCoords = activeBoard.GetShipCoords(column, row);
+            foreach (Coords coord in destroyedShipCoords)
+            {
+                activeBoard.Update(coord.Column, coord.Row, ShotStatus.Destroyed);
+                ChangeCellColor(activeBoard, borders, Brushes.OrangeRed, coord.Column + 1, coord.Row + 1, true);
+            }
+        }
+
+        private void FinishGame(GameResult gameResult) {
+            string winner = gameResult.winner == Settings.userId ? "You won!" : "You lost.";
+
+
+            Overlay.Visibility = Visibility.Visible;
+            Overlay_winner.Text = winner;
+        }
+
+        private void Disconnect(object sender, RoutedEventArgs e) {
+            this.game.CloseConnection();
+            Application.Current.MainWindow.Height = 900;
+            Uri uri = new Uri("../views/menu/MainMenu.xaml", UriKind.Relative);
+            this.NavigationService.Navigate(uri);
         }
 
         private void Shot(object sender, MouseEventArgs e) {
@@ -142,7 +180,7 @@ namespace Battleships.Board
             }
             if(e.Source is Border) {
                 Border br = (Border)e.Source;
-                if(br.Background == Brushes.Gray || br.Background == Brushes.Orange) {
+                if(br.Background == Brushes.Gray || br.Background == Brushes.Orange || br.Background == Brushes.OrangeRed) {
                     return;
                 }
                 if(Grid.GetRow(br) == 0 || Grid.GetColumn(br) == 0) {

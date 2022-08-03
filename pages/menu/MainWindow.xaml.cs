@@ -21,6 +21,12 @@ namespace Battleships
         public MainWindow()
         {
             InitializeComponent();
+            Application.Current.MainWindow = this;
+        }
+
+        public void ChangeView(Page view)
+        {
+            MainContainer.NavigationService.Navigate(view);
         }
     }
 }

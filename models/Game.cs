@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -46,15 +47,12 @@ namespace Battleships.Board
         public static string opponent = null;
         public int gameId;
 
-        private static ClientWebSocket WsClient;
+        private ClientWebSocket WsClient;
 
         public static event EventHandler<WebSocketContextEventArgs> WebSocketMessage;
 
         public Game(int gameId) {
             this.gameId = gameId;
-            if(WsClient == null) {
-                Connect();
-            }
         }
 
         protected virtual void OnWebSocketMessage (WebSocketContextEventArgs e) {
@@ -63,15 +61,17 @@ namespace Battleships.Board
 
         public async void CloseConnection() {
             if(WsClient.State == WebSocketState.Open){
+                WebSocketMessage = null;
                 await WsClient.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
                 Debug.WriteLine("Websocket connection closed");
             }
         }
 
-        private async void Connect() {
+        public async Task Connect() {
             WsClient = new ClientWebSocket();
             WsClient.Options.AddSubProtocol("bson");
             WsClient.Options.SetRequestHeader("player", Settings.userId.ToString());
+            WsClient.Options.SetRequestHeader("game", this.gameId.ToString());
             await WsClient.ConnectAsync(new Uri("ws://" + Settings.serverUri), CancellationToken.None);
             Debug.WriteLine("Connected to the Websocket Server");
             Listener();
@@ -91,7 +91,7 @@ namespace Battleships.Board
                         }
                         catch (System.Exception ex)
                         {
-                             // TODO
+                            Debug.WriteLine(ex);
                         }
                         finally
                         {
@@ -102,13 +102,14 @@ namespace Battleships.Board
 
         private async void Listener() {
 
-            while (true) {
+            while (WsClient.State == WebSocketState.Open) {
                     ArraySegment<byte> receiveBuffer = new ArraySegment<byte>(new byte[1024]);
                     MemoryStream ms = new MemoryStream(receiveBuffer.Array);
                     await WsClient.ReceiveAsync(receiveBuffer, CancellationToken.None);
                     Message message;
                     try
                         {
+                            if(WsClient.State != WebSocketState.Open) return;
                             using (BsonDataReader reader = new BsonDataReader(ms))
                             {
                                 JsonSerializer serializer = new JsonSerializer();
@@ -129,12 +130,12 @@ namespace Battleships.Board
         }
 
         public void SendBoard(PlayerBoard board) {
-            Send(new Message(RequestType.SetBoard, new Dictionary<string, object> {{"userBoard", new UserBoard(board.SerializeBoard(), gameId)}}));
+            Send(new Message(RequestType.SetBoard, new Dictionary<string, object> {{"userBoard", new UserBoard(board.SerializeBoard())}}));
         }
 
         public void Shot(int row, int column) {
             Debug.WriteLine($"Sending shot data: Column: {column}, Row: {row}");
-            Send(new Message(RequestType.PlayerShot, new Dictionary<string, object> {{"shot", new Shot(column, row, Settings.userId, gameId)}}));
+            Send(new Message(RequestType.PlayerShot, new Dictionary<string, object> {{"shot", new Shot(column, row)}}));
         }
     }
 }

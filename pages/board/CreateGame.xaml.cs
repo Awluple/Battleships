@@ -45,11 +45,13 @@ namespace Battleships.Board
         }
 
         public void BackToMainMenu(object sender, RoutedEventArgs e) {
+            game.CloseConnection();
             Uri uri = new Uri("../views/menu/MainMenu.xaml", UriKind.Relative);
             this.NavigationService.Navigate(uri);
         }
 
         public void Cancel(object sender, RoutedEventArgs e) {
+            game.CloseConnection();
             Uri uri = new Uri("../views/menu/MainMenu.xaml", UriKind.Relative);
             this.NavigationService.Navigate(uri);
         }
@@ -141,9 +143,10 @@ namespace Battleships.Board
             NavigationService.Navigate(page);
         }
 
-        private void JoinCreatedGame(int gameId) {
+        private async void JoinCreatedGame(int gameId) {
             Game.WebSocketMessage += this.GetConfirmation;
             this.game = new Game(gameId);
+            await game.Connect();
             game.JoinGame();
         }
     }

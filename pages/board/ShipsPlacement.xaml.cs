@@ -36,11 +36,27 @@ namespace Battleships.Board
         private DispatcherTimer dispatcherTimer;
         public ShipsPlacement(Game game) : base(game) {
             InitializeComponent();
+            if(NavigationService == null) {
+                Loaded += onLoad;
+            }
+            Game.WebSocketMessage += this.EnemyDisconnected;
+
             this.game = game;
             this.board = new PlayerBoard();
             this.borders = this.CreateGrid(boardGrid);
             this.AddEvents();
             this.DataContext = board;
+        }
+
+        private void EnemyDisconnected(object sender, WebSocketContextEventArgs e) {
+            if(e.message.requestType != RequestType.OpponentConnectionLost) return;
+            Game.WebSocketMessage -= this.EnemyDisconnected;
+
+            Disconnected_Overlay.Visibility = Visibility.Visible;
+        }
+
+        private void onLoad(object sender, RoutedEventArgs e) {
+            this.NavigationService.Navigating += this.NavigationService_WebSocketDisconnect;
         }
 
         private void RepaintArea(Border br, Brush color) {
@@ -151,6 +167,12 @@ namespace Battleships.Board
         private void redirect() {
             var page = new MainBoard(this.game, this.board, this.isStartingPlayer);
             NavigationService.Navigate(page);
+        }
+
+        private void NavigationService_WebSocketDisconnect(object sender, NavigatingCancelEventArgs e)
+        {
+            Debug.WriteLine("NAVI!");
+            this.game.CloseConnection();
         }
 
          private void ChangeOrientation(object sender, MouseEventArgs e) {
