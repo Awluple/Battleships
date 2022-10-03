@@ -56,7 +56,7 @@ namespace Battleships.Board
         }
 
         private void onLoad(object sender, RoutedEventArgs e) {
-            this.NavigationService.Navigating += this.NavigationService_WebSocketDisconnect;
+            // this.NavigationService.Navigating += this.NavigationService_WebSocketDisconnect;
         }
 
         private void RepaintArea(Border br, Brush color) {

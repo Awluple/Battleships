@@ -36,6 +36,7 @@ namespace Battleships.Board
             InitializeComponent();
             Game.WebSocketMessage += this.EnemyDisconnected;
 
+
             this.board = gameBoard;
             this.opponentBorders = this.CreateGrid(opponentGrid);
             this.playerBorders = this.CreateGrid(playerGrid);
@@ -160,7 +161,7 @@ namespace Battleships.Board
 
         private void FinishGame(GameResult gameResult) {
             string winner = gameResult.winner == Settings.userId ? "You won!" : "You lost.";
-
+            Game.WebSocketMessage += this.Rematch;
 
             Overlay.Visibility = Visibility.Visible;
             Overlay_winner.Text = winner;
@@ -171,6 +172,27 @@ namespace Battleships.Board
             Application.Current.MainWindow.Height = 900;
             Uri uri = new Uri("../views/menu/MainMenu.xaml", UriKind.Relative);
             this.NavigationService.Navigate(uri);
+        }
+
+        private void RematchProposition(object sender, RoutedEventArgs e) {
+            Overlay_rematchPropositon.Text = "Rematch proposition sent!";
+            Overlay_rematchPropositon.Visibility = Visibility.Visible;
+            Overlay_rematchButton.IsEnabled = false;
+            game.Rematch();
+        }
+
+        private void Rematch(object sender, WebSocketContextEventArgs e) {
+            if(e.message.requestType != RequestType.RematchAccepted && e.message.requestType != RequestType.RematchProposition) return;
+            Debug.WriteLine("Rematch messege: " + e.message.requestType);
+            if(e.message.requestType == RequestType.RematchProposition) {
+                Overlay_rematchPropositon.Text = "Your opponent wants a rematch!";
+                Overlay_rematchPropositon.Visibility = Visibility.Visible;
+            } else {
+                Game.WebSocketMessage -= this.Rematch;
+                MainWindow parentWindow = Window.GetWindow(this) as MainWindow;
+                var page = new ShipsPlacement(this.game);
+                (Application.Current.MainWindow as MainWindow).MainContainer.NavigationService.Navigate(page);
+            }
         }
 
         private void Shot(object sender, MouseEventArgs e) {

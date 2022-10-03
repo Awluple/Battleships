@@ -39,6 +39,7 @@ namespace Battleships.Board
 
             var mainWindow = (MainWindow)Application.Current.MainWindow;
             mainWindow?.ChangeView(new MainMenu());
+            Application.Current.MainWindow.Height = 900;
         }
     }
 }

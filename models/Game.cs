@@ -137,5 +137,8 @@ namespace Battleships.Board
             Debug.WriteLine($"Sending shot data: Column: {column}, Row: {row}");
             Send(new Message(RequestType.PlayerShot, new Dictionary<string, object> {{"shot", new Shot(column, row)}}));
         }
+        public void Rematch() {
+            Send(new Message(RequestType.RematchProposition, new Dictionary<string, object> {}));
+        }
     }
 }
