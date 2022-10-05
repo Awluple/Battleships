@@ -141,7 +141,7 @@
                 <Button Click="RematchProposition" Style="{DynamicResource Menu}" x:Name="Overlay_rematchButton" FontSize="24">Rematch</Button>
             </Border>
 
-            <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" FontSize="24" x:Name="Overlay_rematchPropositon" Visibility="Hidden"></TextBlock>
+            <TextBlock HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" FontSize="32" FontWeight="Bold" Foreground="White" x:Name="Overlay_rematchPropositon" Visibility="Hidden"></TextBlock>
         </Grid>
     </Grid>
 </Grid>

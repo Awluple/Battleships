@@ -47,7 +47,7 @@ namespace Battleships.Board
         public static string opponent = null;
         public int gameId;
 
-        private ClientWebSocket WsClient;
+        private static ClientWebSocket WsClient;
 
         public static event EventHandler<WebSocketContextEventArgs> WebSocketMessage;
 
@@ -59,11 +59,18 @@ namespace Battleships.Board
             WebSocketMessage?.Invoke(this, e);
         }
 
-        public async void CloseConnection() {
+        public static async void CloseConnection() {
             if(WsClient.State == WebSocketState.Open){
                 WebSocketMessage = null;
                 await WsClient.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
                 Debug.WriteLine("Websocket connection closed");
+            }
+        }
+        public static async void GameQuitCloseConnection() {
+            if(WsClient.State == WebSocketState.Open){
+                WebSocketMessage = null;
+                await WsClient.CloseAsync(WebSocketCloseStatus.EndpointUnavailable, "", CancellationToken.None);
+                Debug.WriteLine("Websocket connection closed - EndpointUnavailable");
             }
         }
 

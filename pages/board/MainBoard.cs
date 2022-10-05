@@ -54,10 +54,13 @@ namespace Battleships.Board
                 lockShooting = true;
             }
         }
-        private void EnemyDisconnected(object sender, WebSocketContextEventArgs e) {
-            if(e.message.requestType != RequestType.OpponentConnectionLost) return;
-            Game.WebSocketMessage -= this.EnemyDisconnected;
-            Disconnected_Overlay.Visibility = Visibility.Visible;
+        private void EnemyLeft(object sender, WebSocketContextEventArgs e) {
+            if(e.message.requestType != RequestType.OpponentLeft && e.message.requestType != RequestType.OpponentConnectionLost) return;
+            Game.WebSocketMessage -= this.EnemyLeft;
+            
+            Overlay_rematchPropositon.Text = "Your opponent has left the game";
+            Overlay_rematchPropositon.Visibility = Visibility.Visible;
+            Overlay_rematchButton.IsEnabled = false;
         }
 
         private void setTurnInfo(bool isPlayerTurn) {
@@ -160,6 +163,8 @@ namespace Battleships.Board
         }
 
         private void FinishGame(GameResult gameResult) {
+            Game.WebSocketMessage += this.EnemyLeft;
+            Game.WebSocketMessage -= this.EnemyDisconnected;
             string winner = gameResult.winner == Settings.userId ? "You won!" : "You lost.";
             Game.WebSocketMessage += this.Rematch;
 
@@ -168,7 +173,7 @@ namespace Battleships.Board
         }
 
         private void Disconnect(object sender, RoutedEventArgs e) {
-            this.game.CloseConnection();
+            Game.CloseConnection();
             Application.Current.MainWindow.Height = 900;
             Uri uri = new Uri("../views/menu/MainMenu.xaml", UriKind.Relative);
             this.NavigationService.Navigate(uri);

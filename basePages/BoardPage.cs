@@ -16,12 +16,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using BattleshipsShared.Communication;
+
 namespace Battleships.Board
 {
     public partial class BoardPage : Page
     {
         protected virtual Game game {get; set;}
         protected virtual PlayerBoard board {get; set;}
+        public virtual Frame Overlay_Disconnected {get; set;}
         public BoardPage(Game game) {
             this.game = game;
         }
@@ -34,6 +37,11 @@ namespace Battleships.Board
                 return;
             }
             borders[column - 1, row - 1].Background = color;
+        }
+        protected void EnemyDisconnected(object sender, WebSocketContextEventArgs e) {
+            if(e.message.requestType != RequestType.OpponentConnectionLost) return;
+            Game.WebSocketMessage -= this.EnemyDisconnected;
+            Overlay_Disconnected.Visibility = Visibility.Visible;
         }
 
         protected TextBlock GetTextBlock() {

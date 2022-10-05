@@ -45,13 +45,13 @@ namespace Battleships.Board
         }
 
         public void BackToMainMenu(object sender, RoutedEventArgs e) {
-            game.CloseConnection();
+            Game.CloseConnection();
             Uri uri = new Uri("../views/menu/MainMenu.xaml", UriKind.Relative);
             this.NavigationService.Navigate(uri);
         }
 
         public void Cancel(object sender, RoutedEventArgs e) {
-            game.CloseConnection();
+            Game.CloseConnection();
             Uri uri = new Uri("../views/menu/MainMenu.xaml", UriKind.Relative);
             this.NavigationService.Navigate(uri);
         }

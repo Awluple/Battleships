@@ -46,13 +46,7 @@ namespace Battleships.Board
             this.borders = this.CreateGrid(boardGrid);
             this.AddEvents();
             this.DataContext = board;
-        }
-
-        private void EnemyDisconnected(object sender, WebSocketContextEventArgs e) {
-            if(e.message.requestType != RequestType.OpponentConnectionLost) return;
-            Game.WebSocketMessage -= this.EnemyDisconnected;
-
-            Disconnected_Overlay.Visibility = Visibility.Visible;
+            this.Overlay_Disconnected = Disconnected_Overlay;
         }
 
         private void onLoad(object sender, RoutedEventArgs e) {
@@ -172,7 +166,7 @@ namespace Battleships.Board
         private void NavigationService_WebSocketDisconnect(object sender, NavigatingCancelEventArgs e)
         {
             Debug.WriteLine("NAVI!");
-            this.game.CloseConnection();
+            Game.CloseConnection();
         }
 
          private void ChangeOrientation(object sender, MouseEventArgs e) {
