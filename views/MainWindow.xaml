@@ -10,6 +10,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../resources/images.xaml"/>
+                <ResourceDictionary Source="../styles/Buttons.xaml"/>
             </ResourceDictionary.MergedDictionaries> 
         </ResourceDictionary>
     </Window.Resources>
@@ -27,6 +28,30 @@
     </Grid.RowDefinitions>
     
     <Frame Grid.Column="0" Grid.Row="0" NavigationUIVisibility="Hidden" Name="MainContainer" Source="./menu/StartPage.xaml" />
+    <Grid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="100" Grid.RowSpan="100" x:Name="Overlay" Visibility="Hidden" Panel.ZIndex="1000" >
+        <Grid.Background>
+          <SolidColorBrush Color="Black" Opacity=".75"/>
+        </Grid.Background>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="100" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+            <TextBlock HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontSize="42" FontWeight="Bold" Foreground="White" x:Name="Overlay_rematchPropositon">
+            Connection to the server has been lost</TextBlock>
+
+            <Border Width="220" Style="{DynamicResource Button}" Margin="10" Grid.Column="0" Grid.Row="2">
+                <Border.Effect>
+                      <DropShadowEffect ShadowDepth="2"/>
+                </Border.Effect>
+                <Button FontSize="35" Click="hyperlink_Reconnect" Style="{DynamicResource Menu}" Grid.Column="0" Grid.Row="2">Reconnect</Button>
+            </Border>
+    </Grid>
 </Grid>
     
 </Window>

@@ -53,7 +53,7 @@ namespace Battleships.Board
                 var page = new ShipsPlacement(this.game);
                 NavigationService.Navigate(page);
             } else {
-                info.Text = $"Could not join the game";
+                info.Text = $"Could not join the game. It it full or has been closed";
                 backButton.Visibility = Visibility.Visible;
             }
         

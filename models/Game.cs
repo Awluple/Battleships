@@ -41,6 +41,10 @@ namespace Battleships.Board
         }
     }
 
+    public class WebSocketErrorContextEventArgs : System.EventArgs {
+
+    }
+
 
     public class Game
     {
@@ -50,6 +54,7 @@ namespace Battleships.Board
         private static ClientWebSocket WsClient;
 
         public static event EventHandler<WebSocketContextEventArgs> WebSocketMessage;
+        public static event EventHandler<WebSocketErrorContextEventArgs> WebSocketError;
 
         public Game(int gameId) {
             this.gameId = gameId;
@@ -57,6 +62,9 @@ namespace Battleships.Board
 
         protected virtual void OnWebSocketMessage (WebSocketContextEventArgs e) {
             WebSocketMessage?.Invoke(this, e);
+        }
+        protected virtual void OnWebSocketError (WebSocketErrorContextEventArgs e) {
+            WebSocketError?.Invoke(this, e);
         }
 
         public static async void CloseConnection() {
@@ -110,6 +118,8 @@ namespace Battleships.Board
         private async void Listener() {
 
             while (WsClient.State == WebSocketState.Open) {
+                try
+                {
                     ArraySegment<byte> receiveBuffer = new ArraySegment<byte>(new byte[1024]);
                     MemoryStream ms = new MemoryStream(receiveBuffer.Array);
                     await WsClient.ReceiveAsync(receiveBuffer, CancellationToken.None);
@@ -129,6 +139,10 @@ namespace Battleships.Board
                         {
                             Console.WriteLine(ex);
                         }
+                }catch (System.Net.WebSockets.WebSocketException)
+                {
+                    this.OnWebSocketError(new WebSocketErrorContextEventArgs());
+                }
                     }
         }
         

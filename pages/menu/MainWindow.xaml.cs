@@ -25,11 +25,24 @@ namespace Battleships
         {
             InitializeComponent();
             Application.Current.MainWindow = this;
+            Game.WebSocketError += ConnectionError;
         }
 
         public void ChangeView(Page view)
         {
             MainContainer.NavigationService.Navigate(view);
+        }
+
+        public void ConnectionError(object sender, WebSocketErrorContextEventArgs e)
+        {
+            Overlay.Visibility = Visibility.Visible;
+        }
+        public void hyperlink_Reconnect(object sender, RoutedEventArgs e)
+        {
+            Overlay.Visibility = Visibility.Hidden;
+           Uri uri = new Uri("../views/menu/StartPage.xaml", UriKind.Relative);
+           Settings.userId = 0;
+           this.MainContainer.NavigationService.Navigate(uri);
         }
     }
 }
