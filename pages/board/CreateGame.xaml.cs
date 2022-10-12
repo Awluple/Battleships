@@ -56,13 +56,9 @@ namespace Battleships.Board
             this.NavigationService.Navigate(uri);
         }
 
-        public void ShowError(bool withCleanup = false) {
-            info.Text = "Could not create a game";
+        public void ShowError(string error) {
+            info.Text = error;
             backButton.Visibility = Visibility.Visible;
-
-            if(withCleanup) {
-                // TODO
-            }
         }
 
         async public void SendCreateRequest() {
@@ -78,9 +74,14 @@ namespace Battleships.Board
                     await writer.WriteAsync(serialized);
                 }
             }
+            catch (System.Net.WebException)
+            {
+                this.ShowError("Could not connect to the server");
+            }
             catch (System.Exception ex)
             {
-                this.ShowError();
+                Debug.WriteLine(ex);
+                this.ShowError("Could not create a game");
             }
         
             try
@@ -98,8 +99,7 @@ namespace Battleships.Board
             }
             catch(Exception err)
             {
-                Console.WriteLine(err.Message);
-                this.ShowError();
+                this.ShowError("Could not create a game");
             }
         }
         private void GetConfirmation(object sender, WebSocketContextEventArgs e) {
@@ -109,10 +109,10 @@ namespace Battleships.Board
             Dictionary<string, JObject> data = Message.DeserializeData(e.message);
             JoinConfirmation confirmation = data["confirmation"].ToObject<JoinConfirmation>();
             if(confirmation.succeed) {
-                info.Text = $"Waiting for an opponent...";
+                info.Text = $"Waiting for an opponent to join in...";
                 Game.WebSocketMessage += this.StartGame;
             } else {
-                this.ShowError(true);
+                this.ShowError("Error. Unable to join the created game");
             }
 
         }

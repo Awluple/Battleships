@@ -21,14 +21,19 @@
     <Grid.RowDefinitions>
         <RowDefinition Height="*" />
         <RowDefinition Height="100" />
-        <RowDefinition Height="auto" />
+        <RowDefinition Height="80" />
         <RowDefinition Height="*" />
 
     </Grid.RowDefinitions>
 
-    <TextBlock x:Name="info" FontSize="18" Grid.Row="1" Grid.Column="1">Connecting...</TextBlock>
-    <Button x:Name="reconnectButton" Click="Reconnect" Visibility="Hidden" FontSize="18" Grid.Row="2" Grid.Column="1">Retry</Button>
+    <TextBlock x:Name="info" FontSize="36" Grid.Row="1" Grid.Column="1">Connecting...</TextBlock>
 
+    <Border x:Name="reconnectButton" Visibility="Hidden" Width="220" Style="{DynamicResource Button}" Margin="10" Grid.Row="2" Grid.Column="1">
+        <Border.Effect>
+              <DropShadowEffect ShadowDepth="2"/>
+        </Border.Effect>
+        <Button Click="Reconnect" Style="{DynamicResource Menu}">RETRY</Button>
+    </Border>
 </Grid>
 
 </Page>

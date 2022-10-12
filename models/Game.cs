@@ -68,7 +68,7 @@ namespace Battleships.Board
         }
 
         public static async void CloseConnection() {
-            if(WsClient.State == WebSocketState.Open){
+            if(WsClient != null && WsClient.State == WebSocketState.Open){
                 WebSocketMessage = null;
                 await WsClient.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
                 Debug.WriteLine("Websocket connection closed");

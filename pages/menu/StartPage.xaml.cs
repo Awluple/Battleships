@@ -57,11 +57,8 @@ namespace Battleships.Menu
             }
             catch(WebException e)
             {
-                if(e.Status == WebExceptionStatus.ConnectFailure) {
-                    ShowConnectionError("Could not connect to the server");
-                } else {
-                    Debug.WriteLine(e.Message);
-                }
+                ShowConnectionError("Could not connect to the server");
+                Debug.WriteLine(e.Message);
             }
         }
     }

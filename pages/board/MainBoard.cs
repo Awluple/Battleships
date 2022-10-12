@@ -49,6 +49,7 @@ namespace Battleships.Board
             this.playerTurn = isStartingPlayer;
             Application.Current.MainWindow.Height = 1200;
             Game.WebSocketMessage += this.GetShotResult;
+            this.Overlay_Disconnected = Disconnected_Overlay;
 
             if(!isStartingPlayer) {
                 lockShooting = true;

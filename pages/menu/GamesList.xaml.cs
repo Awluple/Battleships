@@ -44,9 +44,14 @@ namespace Battleships.Menu
             gamesListGrid.Children.Clear(); // clear old games list
             Dictionary<string, GameInfo[]> games = await this.GetGamesAsync();
 
-            if(!games.ContainsKey("games")) return;
-
-            infoHeader.Text = "Games:";
+            if(!games.ContainsKey("games")) {
+                return;
+            };
+ 
+            if(games["games"].Count() == 0) {
+                infoHeader.Text = "NO GAMES FOUND";
+                return;
+            }
 
             List<RowDefinition> rows = new List<RowDefinition>();
 
@@ -91,6 +96,12 @@ namespace Battleships.Menu
                 gamesListGrid.Children.Add(gameInfo);
                 gamesListGrid.Children.Add(joinButton);
                 rowIndex++;
+            }
+
+            if(rowIndex == 0) {
+                infoHeader.Text = "NO GAMES FOUND";
+            } else {
+                infoHeader.Text = "GAMES:";
             }
         }
         public void Join(object sender, RoutedEventArgs e) {

@@ -49,7 +49,7 @@
                 <Border.Effect>
                       <DropShadowEffect ShadowDepth="2"/>
                 </Border.Effect>
-                <Button FontSize="35" Click="hyperlink_Reconnect" Style="{DynamicResource Menu}" Grid.Column="0" Grid.Row="2">Reconnect</Button>
+                <Button Click="hyperlink_Reconnect" Style="{DynamicResource Menu}" Grid.Column="0" Grid.Row="2">RECONNECT</Button>
             </Border>
     </Grid>
 </Grid>

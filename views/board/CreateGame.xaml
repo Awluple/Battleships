@@ -21,14 +21,27 @@
     <Grid.RowDefinitions>
         <RowDefinition Height="*" />
         <RowDefinition Height="100" />
-        <RowDefinition Height="50" />
+        <RowDefinition Height="70" />
         <RowDefinition Height="*" />
 
     </Grid.RowDefinitions>
 
-    <TextBlock x:Name="info" FontSize="18" Grid.Row="1" Grid.Column="1">Creating game...</TextBlock>
-    <Button x:Name="backButton" Click="BackToMainMenu" Visibility="Hidden" FontSize="18" Grid.Row="2" Grid.Column="1">Back to the Main Menu</Button>
-    <Button x:Name="cancelButton" Click="Cancel" Visibility="Hidden" FontSize="18" Grid.Row="2" Grid.Column="1">Cancel</Button>
+    <TextBlock x:Name="info" FontSize="36" Grid.Row="1" Grid.Column="1">Creating game...</TextBlock>
+
+    <Border x:Name="backButton" Visibility="Hidden" Width="370" Style="{DynamicResource Button}" Margin="10" Grid.Row="2" Grid.Column="1">
+        <Border.Effect>
+              <DropShadowEffect ShadowDepth="2"/>
+        </Border.Effect>
+        <Button Style="{DynamicResource Menu}" Click="BackToMainMenu">BACK TO THE MAIN MENU</Button>
+    </Border>
+
+    <Border x:Name="cancelButton" Visibility="Hidden" Width="220" Style="{DynamicResource Button}" Margin="10" Grid.Row="2" Grid.Column="1">
+        <Border.Effect>
+              <DropShadowEffect ShadowDepth="2"/>
+        </Border.Effect>
+        <Button Style="{DynamicResource Menu}" Click="Cancel">CANCEL</Button>
+    </Border>
+    
 
 </Grid>
 
