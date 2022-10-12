@@ -7,6 +7,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../styles/Buttons.xaml"/>
+                <ResourceDictionary Source="../../styles/GameListElements.xaml"/>
             </ResourceDictionary.MergedDictionaries> 
         </ResourceDictionary>
     </Page.Resources>
@@ -23,18 +24,25 @@
 
         <TextBlock x:Name="infoHeader" Margin="0,0,0,20" TextAlignment="center" FontSize="32" Grid.Row="0" Grid.Column="1"></TextBlock>
 
-        <Grid Margin="20,10,0,20" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
+        <Grid Margin="15,10,0,15" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
-                <RowDefinition Height="50" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="40" />
             </Grid.RowDefinitions>
 
-            <Button Style="{DynamicResource Menu}" Click="hyperlink_MainMenu" Padding="5,0,5,0" Grid.Row="0" Grid.Column="0">Main Menu</Button>
-            <Button Style="{DynamicResource Menu}" Click="LoadGames" Margin="0,10,0,0" Grid.Row="1" Grid.Column="0">Refresh</Button>
+
+            <Border Style="{StaticResource Button}" Grid.Row="0" Grid.Column="0">
+                <Button Style="{StaticResource Menu}" Click="hyperlink_MainMenu" Padding="5,0,5,0" >MAIN MENU</Button>
+            </Border> 
+
+            <Border Style="{StaticResource Button}" Grid.Row="2" Grid.Column="0">
+                <Button Style="{StaticResource Menu}" Click="LoadGames">REFRESH</Button>
+            </Border>
         </Grid>
 
         <Grid Margin="75,0,75,0" Grid.Row="1" Grid.Column="1" x:Name="gamesListGrid">

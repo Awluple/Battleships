@@ -133,12 +133,12 @@
                 <RowDefinition Height="40" />
             </Grid.RowDefinitions>
 
-            <Border Style="{DynamicResource Button}" Margin="10" Grid.Row="0" Grid.Column="1">
-                <Button Click="Disconnect" Style="{DynamicResource Menu}" x:Name="Overlay_mainMenuButton" FontSize="24">Main Menu</Button>
+            <Border Style="{StaticResource Button}" Margin="10" Grid.Row="0" Grid.Column="1">
+                <Button Click="Disconnect" Style="{StaticResource Menu}" x:Name="Overlay_mainMenuButton" FontSize="24">Main Menu</Button>
             </Border>
 
-            <Border Style="{DynamicResource Button}" Margin="10" Grid.Row="0" Grid.Column="2">
-                <Button Click="RematchProposition" Style="{DynamicResource Menu}" x:Name="Overlay_rematchButton" FontSize="24">Rematch</Button>
+            <Border Style="{StaticResource Button}" Margin="10" Grid.Row="0" Grid.Column="2">
+                <Button Click="RematchProposition" Style="{StaticResource Menu}" x:Name="Overlay_rematchButton" FontSize="24">Rematch</Button>
             </Border>
 
             <TextBlock HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" FontSize="32" FontWeight="Bold" Foreground="White" x:Name="Overlay_rematchPropositon" Visibility="Hidden"></TextBlock>

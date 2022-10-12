@@ -121,7 +121,7 @@ namespace Battleships.Board
                     waitingText.Visibility = Visibility.Visible;
                     dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
                     dispatcherTimer.Tick += new EventHandler(UpdateWaiting);
-                    dispatcherTimer.Interval = new TimeSpan(0,0,0,0,800);
+                    dispatcherTimer.Interval = new TimeSpan(0,0,0,0,800); // waiting for an opponent animation
                     dispatcherTimer.Start();
                 }
             };

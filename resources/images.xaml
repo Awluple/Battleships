@@ -2,12 +2,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:MSDNSample">
-
-    <!-- <ImageBrush  Stretch="UniformToFill">
-        <ImageBrush.ImageSource>
-            <BitmapImage UriSource="../media/images/paper.jpg"/>
-        </ImageBrush.ImageSource>
-    </ImageBrush> -->
     <BitmapImage x:Key="backgroundPaper" UriSource="pack://siteoforigin:,,,/media/images/paper.jpg"/>
     <BitmapImage x:Key="orientationArrow" UriSource="pack://siteoforigin:,,,/media/images/orientationArrow.png"/>
     <BitmapImage x:Key="carrier" UriSource="pack://siteoforigin:,,,/media/images/carrier.png"/>

@@ -68,27 +68,19 @@ namespace Battleships.Menu
                 rows.Add(row);
                 gamesListGrid.RowDefinitions.Add(row);
 
-
                 TextBlock gameInfo = new TextBlock();
+                gameInfo.Style = (Style)this.Resources["gameId"];
                 gameInfo.Text = $"Game #{game.id}";
-                gameInfo.FontSize = 24;
-                gameInfo.FontWeight = FontWeights.Bold;
-                gameInfo.TextAlignment = TextAlignment.Center;
-                gameInfo.Margin = new Thickness{ Bottom = 10, Top = 10 };
                 
                 Grid.SetRow(gameInfo, rowIndex);
                 Grid.SetColumn(gameInfo, 0);
 
 
-
                 Button joinButton = new Button();
                 joinButton.Tag = game.id;
+                joinButton.Content = "JOIN";
                 joinButton.Click += this.Join;
-                joinButton.Style = (Style)FindResource("Menu");
-                joinButton.Content = "Join";
-                joinButton.HorizontalAlignment = HorizontalAlignment.Center;
-                joinButton.Padding = new Thickness{ Right = 10, Left = 10 };
-                joinButton.Margin = new Thickness{ Bottom = 5, Top = 5 };
+                joinButton.Style = (Style)this.Resources["joinButton"];
 
                 Grid.SetRow(joinButton, rowIndex);
                 Grid.SetColumn(joinButton, 1);

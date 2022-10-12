@@ -5,14 +5,6 @@
     
 <Style TargetType="{x:Type Border}" x:Key="Button">
     <Setter Property="Background" Value="White"/>
-    <!-- <Style.Resources>
-        <Style TargetType="{x:Type Button}" x:Key="Menu">
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Background" Value="#FFDFD991"/>
-        </Style>
-    </Style.Resources> -->
 </Style>
 
 <Style TargetType="{x:Type Button}" x:Key="Menu">

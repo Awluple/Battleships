@@ -43,8 +43,8 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Border Style="{DynamicResource Button}" Margin="10" Grid.Row="0" Grid.Column="1">
-            <Button Click="BackToMainMenu" Style="{DynamicResource Menu}" x:Name="Overlay_mainMenuButton" FontSize="24">Main Menu</Button>
+        <Border Style="{StaticResource Button}" Margin="10" Grid.Row="0" Grid.Column="1">
+            <Button Click="BackToMainMenu" Style="{StaticResource Menu}" x:Name="Overlay_mainMenuButton" FontSize="24">Main Menu</Button>
         </Border>
     </Grid>
 </Grid>
