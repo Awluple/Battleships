@@ -6,6 +6,7 @@ using BattleshipsShared.Communication;
 
 namespace Battleships.Board
 {
+    /// <summary>Class that holds and manages all the information about a user's game board</summary>
     public class PlayerBoard : INotifyPropertyChanged
     {
 
@@ -39,6 +40,8 @@ namespace Battleships.Board
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        /// <summary>Converts a ShipStatus array into an int array</summary>
+        /// <returns>A 2d int array representation of a player's board</returns>
         public int[,] SerializeBoard() {
             int[,] serialized = new int[10,10];
 
@@ -50,12 +53,18 @@ namespace Battleships.Board
 
             return serialized;
         }
-
+        /// <summary>Checks if it is possible to place a ship in a selected location</summary>
+        /// <returns>True if it is possible to place a ship, otherwise false</returns>
+        /// <param name="ship">Type of ship to be placed</param>
+        /// <param name="orientation">Orientation in which a ship will be placed</param>
+        /// <param name="column">Column number at the first segment of a ship</param>
+        /// <param name="row">Row number at the first segment of a ship</param>
         public bool CheckPlacement(ShipsClasses ship, ShipOrientation orientation, int column, int row) {
             if(column < 0 || row < 0){
                  return false;
             };
 
+            // check if all of the ships segments are in the range of the game board
             if(orientation == ShipOrientation.Vertical && column + (int)ship > 10){
                 return false;
             } else if (orientation == ShipOrientation.Horizontal && row + (int)ship > 10){
@@ -69,6 +78,10 @@ namespace Battleships.Board
         return true;
         }
 
+        /// <summary>Updates the game board at selected location</summary>
+        /// <param name="column">Column number</param>
+        /// <param name="row">Row number</param>
+        /// <param name="status">Status of a given shot</param>
         public void Update(int column, int row, ShotStatus status){
             if(status == ShotStatus.Hit) {
                 this.board[row, column] = ShipStatus.Damaged;
@@ -76,29 +89,36 @@ namespace Battleships.Board
                 this.board[row, column] = ShipStatus.Destroyed;
             }
         }
-
-        public bool IsAvialiavle(ShipsClasses ship, ShipOrientation orientation, int column, int row) {
-            //check first 3x3 area
+        
+        /// <summary>Checks an area where a ship is to be placed. It checks if there is no other ships in a given location or around the ship to be placed.
+        /// It first checks 3x3 area around the first segment of the ship, then it checks 1x3 area for every next ship segment</summary>
+        /// <param name="ship">ShipsClasses of a ship to be placed</param>
+        /// <param name="orientation">ShipOrientation of a ship to check</param>
+        /// <param name="column">Firts segment column number</param>
+        /// <param name="row">Firts segment row number</param>
+        /// <returns>True if a location if free, otherwise false</returns>
+        private bool IsAvialiavle(ShipsClasses ship, ShipOrientation orientation, int column, int row) {
+            //check the first 3x3 area
             for (var rowIndex = row - 1; rowIndex <= row + 1; rowIndex++) {
                 for (var columnIndex = column - 1; columnIndex <= column + 1; columnIndex++) {
-                    if(columnIndex < 0 || columnIndex >= 11 || rowIndex < 0 || rowIndex >= 11) continue;
-                    if(board[rowIndex, columnIndex] != ShipStatus.Empty){
+                    if(columnIndex < 0 || columnIndex >= 11 || rowIndex < 0 || rowIndex >= 11) continue; // do not go outside the board range
+                    if(board[rowIndex, columnIndex] != ShipStatus.Empty){ // Break if a location is not empty
                         return false;
                     };
                 }
             }
-            //check the text 1x3 area for every ship segment
-            for(int i = 1; i <= (int)ship; i++) {
+            //check the next 1x3 area for every ship segment
+            for(int i = 1; i <= (int)ship; i++) { // ship segment
                 int newCol = orientation == ShipOrientation.Vertical ? column + i : column;
                 int newRow = orientation == ShipOrientation.Horizontal ? row + i : row;
-                for (var j = -1; j <= 1; j++) {
+                for (var j = -1; j <= 1; j++) { // 1x3 area
 
                     int columnIndex = orientation == ShipOrientation.Horizontal ? newCol + j : newCol;
                     int rowIndex = orientation == ShipOrientation.Vertical ? newRow + j : newRow;
 
-                    if(columnIndex < 0 || columnIndex > 11 || rowIndex < 0 || rowIndex > 11) continue;
+                    if(columnIndex < 0 || columnIndex > 11 || rowIndex < 0 || rowIndex > 11) continue; // do not go outside the board range
 
-                    if(board[rowIndex, columnIndex] != ShipStatus.Empty){
+                    if(board[rowIndex, columnIndex] != ShipStatus.Empty){ // Break if a location is not empty
                         return false;
                     };
                 }
@@ -106,11 +126,21 @@ namespace Battleships.Board
             
             return true;
         }
-
+        
+        /// <summary>Returns ShipStatus in the board at a given coors</summary>
+        /// <param name="column">Column number</param>
+        /// <param name="row">Row number</param>
+        /// <returns>ShipStatus at the given coords</returns>
         public ShipStatus getOccupation(int column, int row) {
             return this.board[row, column];
         }
 
+        /// <summary>Places a ship on the board. It also checks if the given location is not already occupied</summary>
+        /// <param name="ship">ShipsClasses of a ship to be placed</param>
+        /// <param name="orientation">ShipOrientation of a ship to be placed</param>
+        /// <param name="column">Firts segment column number</param>
+        /// <param name="row">Firts segment row number</param>
+        /// <returns>True if a ship has been successfully placed, otherwise false</returns>
         public bool PlaceShip(ShipsClasses ship, ShipOrientation orientation, int column, int row) {
             if(this.shipsLeft[ship] == 0) {
                 return false;
@@ -129,68 +159,79 @@ namespace Battleships.Board
 
             var left = this.shipsLeft;
             left[ship] = left[ship] - 1;
-
-            this.shipsLeft = left; 
-
+            this.shipsLeft = left; // remove the ship from the list of ships left to be placed
             return true;
         }
-
+        
+        /// <summary>Used in marking a ship is destroyed. Starting at a given location it searches for all nearby fields on the board to collect Coords of all segments of a ship</summary>
+        /// <param name="column">Column number</param>
+        /// <param name="row">Row number</param>
+        /// <returns>A List of Coords with all segments of the ship </returns>
         public List<Coords> GetShipCoords(int column, int row) {
                 (bool tried, List<Coords> toMarkAsDestroyed) firstSide = (false, new List<Coords>());
                 (bool tried, List<Coords> toMarkAsDestroyed) secondSide = (false, new List<Coords>());
 
                 for (var rowIndex = row - 1; rowIndex <= row + 1; rowIndex++) {
                     for (var columnIndex = column - 1; columnIndex <= column + 1; columnIndex++) {
-                        if(columnIndex < 0 || columnIndex >= 11 || rowIndex < 0 || rowIndex >= 11) continue;
+                        if(columnIndex < 0 || columnIndex >= 11 || rowIndex < 0 || rowIndex >= 11) continue; // do not go outside the board range
                         if(board[rowIndex, columnIndex] != ShipStatus.Empty){
-                            ShipOrientation orientation = rowIndex - row != 0 ? ShipOrientation.Horizontal : ShipOrientation.Vertical;
+                            ShipOrientation orientation = rowIndex - row != 0 ? ShipOrientation.Horizontal : ShipOrientation.Vertical; // determine in which direction the ship is turned
 
-                            if(rowIndex == row && columnIndex == column) {
+                            if(rowIndex == row && columnIndex == column) { // ignore initial location
                                 continue;
                             }
 
-                            int vector;
-
+                            int direction; // determines a side of the ship to check
                             if(orientation == ShipOrientation.Horizontal) {
-                                vector = rowIndex - row;
+                                direction = rowIndex - row;
                             } else {
-                                vector = columnIndex - column;
+                                direction = columnIndex - column;
                             }
 
                             if(firstSide.tried == false) {
                                 firstSide.tried = true;
-                                firstSide.toMarkAsDestroyed = GetNextSegment(orientation, vector, column, row);
+                                firstSide.toMarkAsDestroyed = GetNextSegment(orientation, direction, column, row);
                             } else {
                                 secondSide.tried = true;
-                                secondSide.toMarkAsDestroyed = GetNextSegment(orientation, vector, column, row);
+                                secondSide.toMarkAsDestroyed = GetNextSegment(orientation, direction, column, row);
                             }
                         };
                     }
                 }
 
+                // joins all coords into a one list
                 firstSide.toMarkAsDestroyed.AddRange(secondSide.toMarkAsDestroyed);
                 Coords initialCoords = new Coords(column, row);
                 firstSide.toMarkAsDestroyed.Add(initialCoords);
+
                 return firstSide.toMarkAsDestroyed;
 
             }
 
-            private List<Coords> GetNextSegment(ShipOrientation orientation, int vector, int column, int row, int segment = 1, List<Coords> toMarkAsDestroyed = null) {
-                int newCol = orientation == ShipOrientation.Vertical ? column + segment * vector : column;
-                int newRow = orientation == ShipOrientation.Horizontal ? row + segment * vector : row;
+            /// <summary>Adds next segment to the list of the ship's segments coords</summary>
+            /// <param name="orientation">The ShipOrientation of the shp</param>
+            /// <param name="direction">In which direction the function should move</param>
+            /// <param name="column">Column number</param>
+            /// <param name="row">Row number</param>
+            /// <param name="segment">Currently checked segment of the ship</param>
+            /// <param name="toMarkAsDestroyed">List of Coords of ship segments from the previous method executions</param>
+            private List<Coords> GetNextSegment(ShipOrientation orientation, int direction, int column, int row, int segment = 1, List<Coords> toMarkAsDestroyed = null) {
+                // calculate the coords to be checked
+                int newCol = orientation == ShipOrientation.Vertical ? column + segment * direction : column;
+                int newRow = orientation == ShipOrientation.Horizontal ? row + segment * direction : row;
 
                 if(toMarkAsDestroyed == null) {
                     toMarkAsDestroyed = new List<Coords>();
                 }
 
-                if(newCol < 0 || newCol > 11 || newRow < 0 || newRow > 11) return toMarkAsDestroyed;
+                if(newCol < 0 || newCol > 11 || newRow < 0 || newRow > 11) return toMarkAsDestroyed; // finish if the next segment should be outside the board
 
                 if (board[newRow, newCol] == ShipStatus.Empty) {
-                    return toMarkAsDestroyed;
+                    return toMarkAsDestroyed; // finish if the next board field is empty
                 } else {
-                    Coords cor = new Coords(newCol, newRow);
-                    toMarkAsDestroyed.Add(cor);
-                    return GetNextSegment(orientation, vector, column, row, segment + 1, toMarkAsDestroyed);
+                    Coords coor = new Coords(newCol, newRow);
+                    toMarkAsDestroyed.Add(coor);
+                    return GetNextSegment(orientation, direction, column, row, segment + 1, toMarkAsDestroyed); // check the next board field
                 };
             }
         }
