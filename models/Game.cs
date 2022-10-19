@@ -19,7 +19,9 @@ namespace Battleships.Board
     public class WebSocketContextEventArgs : System.EventArgs {
         public readonly Message message;
 
-
+        /// <summary>Deserializes data comming from the server into Message object</summary>
+        /// <param name="receiveBuffer">Received buffer from the listener</param>
+        /// <returns>Deselialized Message object</returns>
         private Message GetData(byte[] receiveBuffer) {
             MemoryStream ms = new MemoryStream(receiveBuffer);
             try
@@ -27,7 +29,9 @@ namespace Battleships.Board
                     using (BsonDataReader reader = new BsonDataReader(ms))
                     {
                         JsonSerializer serializer = new JsonSerializer();
-                        return serializer.Deserialize<Message>(reader);
+                        Message message = serializer.Deserialize<Message>(reader);
+                        Debug.WriteLine($"Data recieved - {message.requestType}");
+                        return message;
                     }
                 }
                 catch (Newtonsoft.Json.JsonSerializationException ex)
@@ -45,7 +49,8 @@ namespace Battleships.Board
 
     }
 
-
+    /// <summary>Holds a game sennsion, manages WebSocket connection with the server</summary>
+    /// <param name="gameId">Id of a game to connect</param>
     public class Game
     {
         public static string opponent = null;
@@ -67,6 +72,7 @@ namespace Battleships.Board
             WebSocketError?.Invoke(this, e);
         }
 
+        /// <summary>Closes the WebSocket connection with the server if the connection exists</summary>
         public static async void CloseConnection() {
             if(WsClient != null && WsClient.State == WebSocketState.Open){
                 WebSocketMessage = null;
@@ -74,25 +80,21 @@ namespace Battleships.Board
                 Debug.WriteLine("Websocket connection closed");
             }
         }
-        public static async void GameQuitCloseConnection() {
-            if(WsClient.State == WebSocketState.Open){
-                WebSocketMessage = null;
-                await WsClient.CloseAsync(WebSocketCloseStatus.EndpointUnavailable, "", CancellationToken.None);
-                Debug.WriteLine("Websocket connection closed - EndpointUnavailable");
-            }
-        }
-
+        /// <summary>Connect to the server using WebSocket</summary>
         public async Task Connect() {
             WsClient = new ClientWebSocket();
+            
             WsClient.Options.AddSubProtocol("bson");
             WsClient.Options.SetRequestHeader("player", Settings.userId.ToString());
             WsClient.Options.SetRequestHeader("game", this.gameId.ToString());
+
             await WsClient.ConnectAsync(new Uri("ws://" + Settings.serverUri), CancellationToken.None);
             Debug.WriteLine("Connected to the Websocket Server");
-            Listener();
+            Listener(); // start listenig for upcoming messages
         }
 
-
+        /// <summary>Manages sending messages to the server</summary>
+        /// <param name="message">Message to be send to the server</param>
         private async void Send(Message message) {
                     using (MemoryStream ms = new MemoryStream())
                     using (BsonDataWriter datawriter = new BsonDataWriter(ms))
@@ -108,13 +110,10 @@ namespace Battleships.Board
                         {
                             Debug.WriteLine(ex);
                         }
-                        finally
-                        {
-                            
-                        }
                     }
                 }
 
+        /// <summary>Listens to upcoming messenges from the server. Runs OnWebSocketMessage event when a messege is recived or OnWebSocketError if there was an error</summary>
         private async void Listener() {
 
             while (WsClient.State == WebSocketState.Open) {
@@ -123,27 +122,21 @@ namespace Battleships.Board
                     ArraySegment<byte> receiveBuffer = new ArraySegment<byte>(new byte[1024]);
                     MemoryStream ms = new MemoryStream(receiveBuffer.Array);
                     await WsClient.ReceiveAsync(receiveBuffer, CancellationToken.None);
-                    Message message;
                     try
                         {
                             if(WsClient.State != WebSocketState.Open) return;
-                            using (BsonDataReader reader = new BsonDataReader(ms))
-                            {
-                                JsonSerializer serializer = new JsonSerializer();
-                                message = serializer.Deserialize<Message>(reader);
-                                Debug.WriteLine($"Data recieved - {message.requestType}");
-                                this.OnWebSocketMessage(new WebSocketContextEventArgs(receiveBuffer.Array));
-                            }
+                            this.OnWebSocketMessage(new WebSocketContextEventArgs(receiveBuffer.Array));
                         }
                         catch (Newtonsoft.Json.JsonSerializationException ex)
                         {
-                            Console.WriteLine(ex);
+                            Debug.WriteLine(ex);
                         }
-                }catch (System.Net.WebSockets.WebSocketException)
+                }catch (System.Net.WebSockets.WebSocketException ex)
                 {
+                    Debug.WriteLine(ex);
                     this.OnWebSocketError(new WebSocketErrorContextEventArgs());
                 }
-                    }
+            }
         }
         
         public void JoinGame() {

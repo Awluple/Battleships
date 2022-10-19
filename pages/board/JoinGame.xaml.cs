@@ -23,7 +23,8 @@ using BattleshipsShared.Models;
 
 namespace Battleships.Board
 {
-
+    /// <summary>Handles joining to games from GamesList page</summary>
+    /// <param name="gameId">Id of a game to join</param>
     public partial class JoinGame : Page
     {
         private Game game;
@@ -41,7 +42,7 @@ namespace Battleships.Board
             await game.Connect();
             this.game.JoinGame();
         }
-
+        /// <summary>Checks if connection to the server and joining to the game were successful, then redirects to the ShipPlacement page</summary>
         private void GetConfirmation(object sender, WebSocketContextEventArgs e) {
             if(!(e.message.requestType == RequestType.JoinConfirmation)) return;
 

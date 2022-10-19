@@ -25,7 +25,7 @@ using Battleships.Menu;
 
 namespace Battleships.Board
 {
-
+    /// <summary>Overlay showing up when connection with the server has been lost</summary>
     public partial class ConnectionLost : Page
     {
         public ConnectionLost()
@@ -34,9 +34,6 @@ namespace Battleships.Board
         }
 
         public void BackToMainMenu(object sender, RoutedEventArgs e) {
-            // Uri uri = new Uri("../views/menu/MainMenu.xaml", UriKind.Relative);
-            // this.NavigationService.Navigate(uri);
-
             var mainWindow = (MainWindow)Application.Current.MainWindow;
             mainWindow?.ChangeView(new MainMenu());
             Application.Current.MainWindow.Height = 900;

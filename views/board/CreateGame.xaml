@@ -39,7 +39,7 @@
         <Border.Effect>
               <DropShadowEffect ShadowDepth="2"/>
         </Border.Effect>
-        <Button Style="{StaticResource Menu}" Click="Cancel">CANCEL</Button>
+        <Button Style="{StaticResource Menu}" Click="BackToMainMenu">CANCEL</Button>
     </Border>
     
 

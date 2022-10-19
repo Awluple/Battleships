@@ -33,7 +33,7 @@ namespace Battleships.Board
 
         public int id { get; set; }
     }
-    
+    /// <summary>Class responsible for creating a new game</summary>
     public partial class CreateGame : Page
     {
 
@@ -50,21 +50,18 @@ namespace Battleships.Board
             this.NavigationService.Navigate(uri);
         }
 
-        public void Cancel(object sender, RoutedEventArgs e) {
-            Game.CloseConnection();
-            Uri uri = new Uri("../views/menu/MainMenu.xaml", UriKind.Relative);
-            this.NavigationService.Navigate(uri);
-        }
-
         public void ShowError(string error) {
             info.Text = error;
             backButton.Visibility = Visibility.Visible;
         }
 
+        /// <summary>Sends a http request to the server and handles the response</summary>
         async public void SendCreateRequest() {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://" + Settings.serverUri);
             request.Method = "POST";
             request.ContentType = "application/json";
+
+            // Request
             try
             {
                 using(Stream stream = await request.GetRequestStreamAsync())
@@ -84,6 +81,7 @@ namespace Battleships.Board
                 this.ShowError("Could not create a game");
             }
         
+            // Response
             try
             {
                 using(HttpWebResponse response = (HttpWebResponse) await request.GetResponseAsync())
@@ -99,15 +97,18 @@ namespace Battleships.Board
             }
             catch(Exception err)
             {
+                Debug.WriteLine(err);
                 this.ShowError("Could not create a game");
             }
         }
+        /// <summary>Checks if connection to the server and joining to the game were successful</summary>
         private void GetConfirmation(object sender, WebSocketContextEventArgs e) {
             if(!(e.message.requestType == RequestType.JoinConfirmation)) return;
 
             Game.WebSocketMessage -= this.GetConfirmation;
             Dictionary<string, JObject> data = Message.DeserializeData(e.message);
             JoinConfirmation confirmation = data["confirmation"].ToObject<JoinConfirmation>();
+            
             if(confirmation.succeed) {
                 info.Text = $"Waiting for an opponent to join in...";
                 Game.WebSocketMessage += this.StartGame;
@@ -116,15 +117,11 @@ namespace Battleships.Board
             }
 
         }
-
+        /// <summary>Redirects to the ship placement page when both an opponent player joins</summary>
         public void StartGame(object sender, WebSocketContextEventArgs e) {
             if(!(e.message.requestType == RequestType.OpponentFound)) return;
             Game.WebSocketMessage -= this.StartGame;
 
-            Dictionary<string, JObject> data = Message.DeserializeData(e.message);
-            JoinConfirmation opponent = data["confirmation"].ToObject<JoinConfirmation>();
-
-            
             if(NavigationService == null) {
                 Loaded += redirect;
             } else {
@@ -143,6 +140,8 @@ namespace Battleships.Board
             NavigationService.Navigate(page);
         }
 
+        /// <summary>Try to connect to the server and the game using WebSockets</summary>
+        /// <param name="gameId">Id of a game to connect</param>
         private async void JoinCreatedGame(int gameId) {
             Game.WebSocketMessage += this.GetConfirmation;
             this.game = new Game(gameId);

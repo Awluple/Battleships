@@ -1,5 +1,6 @@
 namespace Battleships.Board
 {
+    /// <summary>Representation of a ship health status</summary>
     public enum ShipStatus
     {
         Empty = 0,
@@ -7,7 +8,7 @@ namespace Battleships.Board
         Damaged,
         Destroyed,
     }
-
+    /// <summary>Classes of the ships, number represents lenght of a ship</summary>
     public enum ShipsClasses
     {
         Carrier = 5,
@@ -16,7 +17,7 @@ namespace Battleships.Board
         Destroyer = 2,
         Submarine = 1,
     }
-
+    /// <summary>Ship oriantation on the board</summary>
     public enum ShipOrientation {
         Horizontal,
         Vertical
