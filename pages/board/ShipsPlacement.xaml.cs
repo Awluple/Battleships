@@ -24,7 +24,8 @@ using BattleshipsShared.Models;
 
 namespace Battleships.Board
 {
-
+    /// <summary>Controls user's inputs on ship placement page</summary>
+    /// <param name="game">Currenty connected game</param>
     public partial class ShipsPlacement : BoardPage
     {
         private ShipOrientation shipOrientation = ShipOrientation.Vertical;
@@ -36,9 +37,6 @@ namespace Battleships.Board
         private DispatcherTimer dispatcherTimer;
         public ShipsPlacement(Game game) : base(game) {
             InitializeComponent();
-            if(NavigationService == null) {
-                Loaded += onLoad;
-            }
             Game.WebSocketMessage += this.EnemyDisconnected;
 
             this.game = game;
@@ -48,10 +46,9 @@ namespace Battleships.Board
             this.DataContext = board;
             this.Overlay_Disconnected = Disconnected_Overlay;
         }
-
-        private void onLoad(object sender, RoutedEventArgs e) {
-            // this.NavigationService.Navigating += this.NavigationService_WebSocketDisconnect;
-        }
+        /// <summary>Paints an area with the size depending on a currenlty selected ship</summary>
+        /// <param name="br">Border class with the first segment of a ship</param>
+        /// <param name="color">Color on which to paint the area</param>
 
         private void RepaintArea(Border br, Brush color) {
             int maxColumn = this.shipOrientation == ShipOrientation.Vertical ? (int)this.selectedShip + 1 : 2;
@@ -79,7 +76,7 @@ namespace Battleships.Board
                     shipColor = Brushes.OrangeRed;
                     areaColor = Brushes.Orange;
                 }
-                // Paint the area
+                // Paint the area aroud the ship
                 RepaintArea(br, areaColor);
 
                 // Paint the ship
@@ -100,7 +97,7 @@ namespace Battleships.Board
                 RepaintArea(br, Brushes.LightBlue);
             }
         }
-
+        /// <summary>Checks if it is possible to place a ship on a selected cell, then updates the board object and UI</summary>
         private void PlaceShip(object sender, MouseEventArgs e) {
             e.Handled = true;
             if(e.Source is Border) {
@@ -118,14 +115,17 @@ namespace Battleships.Board
 
                     orientationImage.Visibility = Visibility.Hidden;
                     orientationText.Visibility = Visibility.Hidden;
+
+                    // Waiting for an opponent animation
                     waitingText.Visibility = Visibility.Visible;
                     dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
                     dispatcherTimer.Tick += new EventHandler(UpdateWaiting);
-                    dispatcherTimer.Interval = new TimeSpan(0,0,0,0,800); // waiting for an opponent animation
+                    dispatcherTimer.Interval = new TimeSpan(0,0,0,0,800); 
                     dispatcherTimer.Start();
                 }
             };
         }
+        /// <summary>Updates the Waiting for the opponent text</summary>
         private void UpdateWaiting(object sender, EventArgs e)
         {
             if(waitingText.Text.Length >= 27) {
@@ -134,7 +134,7 @@ namespace Battleships.Board
                 waitingText.Text = waitingText.Text + ".";
             }
         }
-
+        /// <summary>Starts the game when GameReady request has been sent by the server</summary>
         private void StartGame(object sender, WebSocketContextEventArgs e)
         {
             if(e.message.requestType != RequestType.GameReady) {
@@ -145,7 +145,7 @@ namespace Battleships.Board
             JObject obj = (JObject)e.message.data;
 
             Dictionary<string, object> data = obj.ToObject<Dictionary<string, object>>();
-            this.isStartingPlayer = Int32.Parse(data["startingPlayer"].ToString()) == Settings.userId;
+            this.isStartingPlayer = Int32.Parse(data["startingPlayer"].ToString()) == Settings.userId; // if startingPlayer is the same as the user, the user has the first turn
 
             if(NavigationService == null) {
                 Loaded += redirect;
@@ -154,19 +154,9 @@ namespace Battleships.Board
             }  
         }
 
-        private void redirect(object sender, RoutedEventArgs e) {
+        private void redirect(object sender = null, RoutedEventArgs e = null) {
             var page = new MainBoard(this.game, this.board, this.isStartingPlayer);
             NavigationService.Navigate(page);
-        }
-        private void redirect() {
-            var page = new MainBoard(this.game, this.board, this.isStartingPlayer);
-            NavigationService.Navigate(page);
-        }
-
-        private void NavigationService_WebSocketDisconnect(object sender, NavigatingCancelEventArgs e)
-        {
-            Debug.WriteLine("NAVI!");
-            Game.CloseConnection();
         }
 
          private void ChangeOrientation(object sender, MouseEventArgs e) {
@@ -176,7 +166,7 @@ namespace Battleships.Board
          private void ChangeOrientation() {
             this.Rotate();
          }
-
+        /// <summary>Rotates the ship orientation arrow</summary>
         private void Rotate() {
             if(this.shipOrientation == ShipOrientation.Horizontal) {
                 this.shipOrientation = ShipOrientation.Vertical;
@@ -192,7 +182,7 @@ namespace Battleships.Board
                 orientationImage.RenderTransform = rotateTransform;
             }
         }
-
+        /// <summary>Updates UI when changing ships and sets new selectedShip</summary>
         private void SelectShip(ShipsClasses newShip) {
             if(this.board.shipsLeft[newShip] == 0) {
                 return;

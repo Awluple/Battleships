@@ -17,15 +17,13 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using BattleshipsShared.Models;
-using BattleshipsShared.Communication;
 
 using Battleships.Board;
 
 namespace Battleships.Menu
 {
-
+    /// <summary>Controls the games list page</summary>
     public partial class GamesList : Page
     {
         public GamesList()
@@ -38,7 +36,7 @@ namespace Battleships.Menu
            Uri uri = new Uri("../views/menu/MainMenu.xaml", UriKind.Relative);
            this.NavigationService.Navigate(uri);
         }
-
+        /// <summary>Gets the games from the server and shows them on the UI</summary>
         public async void LoadGames(object sender = null, RoutedEventArgs e = null) {
             infoHeader.Text = "Loading games...";
             gamesListGrid.Children.Clear(); // clear old games list
@@ -63,6 +61,7 @@ namespace Battleships.Menu
 
                 var row = new RowDefinition();
 
+                // Creating new row in the grid and setting all the information about games
                 GridLengthConverter gridLengthConverter = new GridLengthConverter();
                 row.Height = (GridLength)gridLengthConverter.ConvertFromString("auto");
                 rows.Add(row);
@@ -101,7 +100,8 @@ namespace Battleships.Menu
             var page = new JoinGame((int)button.Tag);
             NavigationService.Navigate(page);
         }
-
+        /// <summary>Creates http request to the server</summary>
+        /// <returns>Dictionary with list of games</returns>
         private async Task<Dictionary<string, GameInfo[]>> GetGamesAsync() {
 
             List<(int, int)> games = new List<(int, int)>();

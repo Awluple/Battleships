@@ -20,6 +20,8 @@ using BattleshipsShared.Communication;
 
 namespace Battleships.Board
 {
+    /// <summary>Base class for pages that show board on the UI</summary>
+    /// <param name="game">Currenty connected game</param>
     public partial class BoardPage : Page
     {
         protected virtual Game game {get; set;}
@@ -28,6 +30,14 @@ namespace Battleships.Board
         public BoardPage(Game game) {
             this.game = game;
         }
+
+        /// <summary>Changes a cell color on selected position</summary>
+        /// <param name="playerBoard">Board object to manipulate</param>
+        /// <param name="borders">List of UI board borders </param>
+        /// <param name="color">The color to paint the cell</param>
+        /// <param name="column">Column number on the UI</param>
+        /// <param name="row">Row number on the UI</param>
+        /// <param name="ignoreOccupation">If false, only empty cells will be painted</param>
 
         protected void ChangeCellColor(PlayerBoard playerBoard, Border[,] borders, Brush color, int column, int row, bool ignoreOccupation = false) {
             if(row <= 0 || column <= 0 || column >= 11 || row >= 11) { // ignore label cells
@@ -43,7 +53,8 @@ namespace Battleships.Board
             Game.WebSocketMessage -= this.EnemyDisconnected;
             Overlay_Disconnected.Visibility = Visibility.Visible;
         }
-
+        /// <summary>Creates standard TextBlock object</summary>
+        /// <returns>Standard TextBlock object</returns>
         protected TextBlock GetTextBlock() {
             var text = new TextBlock();
             text.VerticalAlignment = VerticalAlignment.Center;
@@ -52,7 +63,9 @@ namespace Battleships.Board
             text.FontWeight = FontWeights.Bold;
             return text;
         }
-
+        /// <summary>Creates standard Border object</summary>
+        /// <param name="color">Color of the background</param>
+        /// <returns>Standard Border object</returns>
         protected Border GetBorder(Brush color) {
             var myBorder = new Border();
             myBorder.Background = color;
@@ -60,7 +73,9 @@ namespace Battleships.Board
             myBorder.BorderThickness = new Thickness(0.5);
             return myBorder;
         }
-
+        /// <summary>Creates grid on the UI and sets rows and columns labels</summary>
+        /// <param name="gridRef">Reference to the UI grid</param>
+        /// <returns>List of references to the borders on the UI</returns>
         public Border[,] CreateGrid(Grid gridRef) {
             Border[,] borders = new Border[10,10];
             for (var row = 1; row != 11; row++) {             
@@ -75,7 +90,7 @@ namespace Battleships.Board
             } 
             string[] columns = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
 
-            for (var column = 1; column != 11; column++) {             
+            for (var column = 1; column != 11; column++) { // create column
                 var myBorder = GetBorder(Brushes.BurlyWood);
 
                 var text = GetTextBlock();
@@ -87,7 +102,7 @@ namespace Battleships.Board
                 gridRef.Children.Add(myBorder);
             }
 
-            for (var row = 1; row != 11; row++) {             
+            for (var row = 1; row != 11; row++) { // create rows        
                 var myBorder = GetBorder(Brushes.BurlyWood);
 
                 var text = GetTextBlock();

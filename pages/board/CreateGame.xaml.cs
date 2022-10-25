@@ -130,12 +130,7 @@ namespace Battleships.Board
         }
 
 
-        public void redirect(object sender, RoutedEventArgs e) {
-            var page = new ShipsPlacement(this.game);
-            NavigationService.Navigate(page);
-        }
-
-        public void redirect() {
+        public void redirect(object sender = null, RoutedEventArgs e = null) {
             var page = new ShipsPlacement(this.game);
             NavigationService.Navigate(page);
         }

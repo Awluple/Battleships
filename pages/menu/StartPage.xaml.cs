@@ -38,7 +38,7 @@ namespace Battleships.Menu
             reconnectButton.Visibility = Visibility.Hidden;
             GetUserId();
         }
-
+        /// <summary>Gets an ID for the user from the server, if server is not avaliable shows an error on the UI</summary>
         async private void GetUserId() {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://" + Settings.serverUri + "userid");
         
