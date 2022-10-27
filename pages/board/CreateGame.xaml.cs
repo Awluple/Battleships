@@ -58,6 +58,7 @@ namespace Battleships.Board
         /// <summary>Sends a http request to the server and handles the response</summary>
         async public void SendCreateRequest() {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://" + Settings.serverUri);
+            request.Headers["sessionId"] = Settings.sessionId;
             request.Method = "POST";
             request.ContentType = "application/json";
 
@@ -74,6 +75,7 @@ namespace Battleships.Board
             catch (System.Net.WebException)
             {
                 this.ShowError("Could not connect to the server");
+                return;
             }
             catch (System.Exception ex)
             {
@@ -95,9 +97,17 @@ namespace Battleships.Board
                     this.JoinCreatedGame(gameId.id);
             }
             }
-            catch(Exception err)
+            catch(System.Net.WebException ex)
             {
-                Debug.WriteLine(err);
+                if (ex.Status == WebExceptionStatus.ProtocolError) // get new user id after server restart
+                {
+                    HttpWebResponse res = (HttpWebResponse) ex.Response;
+                    if((int)res.StatusCode == 403) {
+                        var mainWindow = (MainWindow)Application.Current.MainWindow;
+                        mainWindow?.SessionError();
+                    }
+                }
+                Debug.WriteLine(ex);
                 this.ShowError("Could not create a game");
             }
         }

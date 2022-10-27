@@ -36,6 +36,14 @@ namespace Battleships
         public void ConnectionError(object sender, WebSocketErrorContextEventArgs e)
         {
             Overlay.Visibility = Visibility.Visible;
+            errorText.Text = "Connection to the server has been lost";
+            Settings.sessionId = "";
+        }
+        public void SessionError()
+        {
+            Overlay.Visibility = Visibility.Visible;
+            errorText.Text = "Your session ID does not match the server ID.";
+            Settings.sessionId = "";
         }
         public void hyperlink_Reconnect(object sender, RoutedEventArgs e)
         {

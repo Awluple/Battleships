@@ -81,16 +81,26 @@ namespace Battleships.Board
             }
         }
         /// <summary>Connect to the server using WebSocket</summary>
-        public async Task Connect() {
+        /// <returns>True if connection was successful</returns>
+        public async Task<bool> Connect() {
             WsClient = new ClientWebSocket();
             
             WsClient.Options.AddSubProtocol("bson");
             WsClient.Options.SetRequestHeader("player", Settings.userId.ToString());
+            WsClient.Options.SetRequestHeader("sessionId", Settings.sessionId);
             WsClient.Options.SetRequestHeader("game", this.gameId.ToString());
 
-            await WsClient.ConnectAsync(new Uri("ws://" + Settings.serverUri), CancellationToken.None);
+            try
+            {
+                await WsClient.ConnectAsync(new Uri("ws://" + Settings.serverUri), CancellationToken.None);
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
             Debug.WriteLine("Connected to the Websocket Server");
             Listener(); // start listenig for upcoming messages
+            return true;
         }
 
         /// <summary>Manages sending messages to the server</summary>

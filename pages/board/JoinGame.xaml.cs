@@ -37,9 +37,13 @@ namespace Battleships.Board
         }
 
         private async void Join(object sender, RoutedEventArgs e) {
-            Game.WebSocketMessage += this.GetConfirmation;
             this.game = new Game(this.gameId);
-            await game.Connect();
+            if(await game.Connect() == false) {
+                var mainWindow = (MainWindow)Application.Current.MainWindow;
+                mainWindow?.SessionError();
+                return;
+            }
+            Game.WebSocketMessage += this.GetConfirmation;
             this.game.JoinGame();
         }
         /// <summary>Checks if connection to the server and joining to the game were successful, then redirects to the ShipPlacement page</summary>

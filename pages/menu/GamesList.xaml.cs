@@ -107,6 +107,7 @@ namespace Battleships.Menu
             List<(int, int)> games = new List<(int, int)>();
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://" + Settings.serverUri);
+            request.Headers["sessionId"] = Settings.sessionId;
         
             try
             {
@@ -117,6 +118,17 @@ namespace Battleships.Menu
                     string json = await reader.ReadToEndAsync();
                     return JsonConvert.DeserializeObject<Dictionary<string, GameInfo[]>>(json);
             }
+            }
+            catch(System.Net.WebException ex) {
+                if (ex.Status == WebExceptionStatus.ProtocolError) // get new user id after server restart
+                {
+                    HttpWebResponse res = (HttpWebResponse) ex.Response;
+                    if((int)res.StatusCode == 403) {
+                        var mainWindow = (MainWindow)Application.Current.MainWindow;
+                        mainWindow?.SessionError();
+                    }
+                }
+                return new Dictionary<string, GameInfo[]>();
             }
             catch
             {

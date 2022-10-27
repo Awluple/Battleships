@@ -21,13 +21,19 @@
     <Grid.RowDefinitions>
         <RowDefinition Height="*" />
         <RowDefinition Height="100" />
-        <RowDefinition Height="50" />
+        <RowDefinition Height="80" />
         <RowDefinition Height="*" />
 
     </Grid.RowDefinitions>
 
-    <TextBlock x:Name="info" FontSize="18" Grid.Row="1" Grid.Column="1">Joining game...</TextBlock>
-    <Button x:Name="backButton" Click="BackToMainMenu" Visibility="Hidden" FontSize="18" Grid.Row="2" Grid.Column="1">Back to the Main Menu</Button>
+    <TextBlock x:Name="info" FontSize="36" Grid.Row="1" Grid.Column="1">JOINING GAME...</TextBlock>
+
+    <Border x:Name="backButton" Visibility="Hidden" Width="350" Style="{StaticResource Button}" Margin="10" Grid.Row="2" Grid.Column="1">
+        <Border.Effect>
+              <DropShadowEffect ShadowDepth="2"/>
+        </Border.Effect>
+        <Button Click="BackToMainMenu" Style="{StaticResource Menu}" Grid.Row="1" Grid.Column="1">BACK TO THE MAIN MENU</Button>
+    </Border>
 
 </Grid>
 

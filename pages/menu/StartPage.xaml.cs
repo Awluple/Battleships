@@ -41,6 +41,7 @@ namespace Battleships.Menu
         /// <summary>Gets an ID for the user from the server, if server is not avaliable shows an error on the UI</summary>
         async private void GetUserId() {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://" + Settings.serverUri + "userid");
+            request.Headers["sessionId"] = Settings.sessionId;
         
             try
             {
@@ -49,8 +50,9 @@ namespace Battleships.Menu
                 using(StreamReader reader = new StreamReader(stream))
                 {
                     string json = await reader.ReadToEndAsync();
-                    Dictionary<string, int> data = JsonConvert.DeserializeObject<Dictionary<string, int>>(json);
-                    Settings.userId = data["id"];
+                    Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                    Settings.userId = Int32.Parse(data["id"]);
+                    Settings.sessionId = data["sessionId"];
                     Uri uri = new Uri("../views/menu/MainMenu.xaml", UriKind.Relative);
                     this.NavigationService.Navigate(uri);
             }
