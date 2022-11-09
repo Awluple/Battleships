@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace Battleships
 {
     static class Settings {
-        public static readonly string serverUri = "127.0.0.1:7850/";
+        public static readonly string serverUri = System.IO.File.ReadAllText(new Uri(@".\server_address.txt", UriKind.Relative).ToString()) + "/";
         public static int userId = 0;
         public static string sessionId = "";
     }

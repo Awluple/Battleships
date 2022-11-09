@@ -18,6 +18,7 @@
     <Reference Include="BattleshipsShared">
       <HintPath>../BattleshipsShared/bin/Debug/netstandard2.0/BattleshipsShared.dll</HintPath>
     </Reference>
+    <None Update="server_address.txt" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
 </Project>
