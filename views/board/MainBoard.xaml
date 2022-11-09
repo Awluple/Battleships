@@ -13,83 +13,87 @@
 </Page.Resources>
 
 
-<Grid HorizontalAlignment="Center" VerticalAlignment="Center" ShowGridLines="False">
+<Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ShowGridLines="False">
     <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
         <ColumnDefinition Width="40" />
         <ColumnDefinition Width="480" />
         <ColumnDefinition Width="250"  />
+        <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
-        <RowDefinition Height="50" />
         <RowDefinition Height="*" />
         <RowDefinition Height="50" />
+        <RowDefinition Height="385" />
+        <RowDefinition Height="50" />
+        <RowDefinition Height="385" />
         <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
     <Frame JournalOwnership="UsesParentJournal" Source="./ConnectionLost.xaml" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="100" Grid.RowSpan="100" x:Name="Disconnected_Overlay" Visibility="Hidden" Panel.ZIndex="1000"></Frame>
-    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Grid.Column="1" Grid.Row="0">Enemy board:</TextBlock>
+    <TextBlock Margin="0,5,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Grid.Column="2" Grid.Row="1">Enemy board:</TextBlock>
 
-    <Grid HorizontalAlignment="Center" ShowGridLines="false" x:Name="opponentGrid" Grid.Column="1" Grid.Row="1">
+    <Grid HorizontalAlignment="Center" ShowGridLines="false" x:Name="opponentGrid" Grid.Column="2" Grid.Row="2">
          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="35" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
         </Grid.RowDefinitions> 
     </Grid>
 
-    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Grid.Column="1" Grid.Row="2">Your board:</TextBlock>
+    <TextBlock Margin="0,15,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" Grid.Column="2" Grid.Row="3">Your board:</TextBlock>
 
-        <Grid HorizontalAlignment="Center" ShowGridLines="false" x:Name="playerGrid" Grid.Column="1" Grid.Row="4">
+        <Grid HorizontalAlignment="Center" ShowGridLines="false" x:Name="playerGrid" Grid.Column="2" Grid.Row="4">
          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="35" />
+            <ColumnDefinition Width="35" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="35" />
         </Grid.RowDefinitions> 
     </Grid>
 
-    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3" Grid.Row="1">
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3" Grid.Row="2">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>

@@ -76,12 +76,12 @@ namespace Battleships.Board
         /// <summary>Creates grid on the UI and sets rows and columns labels</summary>
         /// <param name="gridRef">Reference to the UI grid</param>
         /// <returns>List of references to the borders on the UI</returns>
-        public Border[,] CreateGrid(Grid gridRef) {
+        public Border[,] CreateGrid(Grid gridRef, Cursor cursor) {
             Border[,] borders = new Border[10,10];
             for (var row = 1; row != 11; row++) {             
                 for (var column = 1; column != 11; column++){
                 var myBorder = GetBorder(Brushes.LightBlue);
-                myBorder.Cursor = Cursors.Hand;
+                myBorder.Cursor = cursor;
                 Grid.SetRow(myBorder, row);
                 Grid.SetColumn(myBorder, column);
                 borders[column -1 , row - 1] = myBorder;

@@ -41,7 +41,7 @@ namespace Battleships.Board
 
             this.game = game;
             this.board = new PlayerBoard();
-            this.borders = this.CreateGrid(boardGrid);
+            this.borders = this.CreateGrid(boardGrid, Cursors.Hand);
             this.AddEvents();
             this.DataContext = board;
             this.Overlay_Disconnected = Disconnected_Overlay;

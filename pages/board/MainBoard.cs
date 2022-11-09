@@ -41,8 +41,8 @@ namespace Battleships.Board
             Game.WebSocketMessage += this.EnemyDisconnected;
 
             this.board = gameBoard;
-            this.opponentBorders = this.CreateGrid(opponentGrid);
-            this.playerBorders = this.CreateGrid(playerGrid);
+            this.opponentBorders = this.CreateGrid(opponentGrid, Cursors.Hand);
+            this.playerBorders = this.CreateGrid(playerGrid, Cursors.Arrow);
 
             this.AddEvents();
             setTurnInfo(isStartingPlayer);
@@ -50,7 +50,7 @@ namespace Battleships.Board
 
             this.DataContext = board;
             this.playerTurn = isStartingPlayer;
-            Application.Current.MainWindow.Height = 1200;
+            Application.Current.MainWindow.Height = 970;
             Game.WebSocketMessage += this.GetShotResult;
             this.Overlay_Disconnected = Disconnected_Overlay;
 
@@ -185,7 +185,7 @@ namespace Battleships.Board
 
         private void Disconnect(object sender, RoutedEventArgs e) {
             Game.CloseConnection();
-            Application.Current.MainWindow.Height = 900;
+            Application.Current.MainWindow.Height = 970;
             Uri uri = new Uri("../views/menu/MainMenu.xaml", UriKind.Relative);
             this.NavigationService.Navigate(uri);
         }
