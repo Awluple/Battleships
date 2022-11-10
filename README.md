@@ -36,4 +36,4 @@ I had planned to do a small project to learn C#, but it has grown to a size that
 **You must specify BattleshipsShared.dll location in Battleship.csproj to build**
 
  ## Running
- Of course it needs BattleshipsServer running to play. Server address can be specified in server_address.txt, the default is 127.0.0.0:7850
+It needs BattleshipsServer running to play. Server address can be specified in server_address.txt, the default is 127.0.0.0:7850
