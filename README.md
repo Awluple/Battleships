@@ -4,6 +4,8 @@ Client for my multiplayer Battleships game, made using WPF and WebSockets
 
 I had planned to do a small project to learn C#, but it has grown to a size that I did not expect.
 
+[Version 1.0 with client and server executables](https://github.com/Awluple/Battleships/releases/tag/1.0)
+
 ## File structure
 ```
 ├─.vscode
