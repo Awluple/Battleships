@@ -6,6 +6,8 @@ I had planned to do a small project to learn C#, but it has grown to a size that
 
 [Version 1.0 with client and server executables](https://github.com/Awluple/Battleships/releases/tag/1.0)
 
+![](app-presentation.gif)
+
 ## File structure
 ```
 ├─.vscode
